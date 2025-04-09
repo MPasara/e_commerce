@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,14 +6,15 @@ import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/common/presentation/app_base_widget.dart';
 import 'package:shopzy/common/utils/custom_provider_observer.dart';
 import 'package:shopzy/common/utils/q_logger.dart';
+import 'package:shopzy/config/env.dart';
 import 'package:shopzy/generated/l10n.dart';
 import 'package:shopzy/main/app_environment.dart';
 import 'package:shopzy/theme/theme.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> mainCommon(AppEnvironment environment) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,8 +66,9 @@ class RootAppWidget extends ConsumerWidget {
   }
 }
 
-final _appStartupProvider = FutureProvider((ref) {
+final _appStartupProvider = FutureProvider((ref) async {
   // here you can initialize all async dependencies like Firebase, SharedPreferences, etc.
+  await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnonKey);
 });
 
 class AppStartupWidget extends ConsumerWidget {

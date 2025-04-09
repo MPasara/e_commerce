@@ -17,6 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
   either_dart: ^1.0.0
+  envied: ^1.1.1
   equatable: ^2.0.7
   flutter:
     sdk: flutter
@@ -35,8 +36,10 @@ dependencies:
   q_architecture: ^1.0.4
   retrofit: ^4.4.2
   sentry_flutter: ^8.14.1
+  supabase_flutter: ^2.8.4
 
 dev_dependencies:
+  envied_generator: ^1.1.1
   build_runner: ^2.4.15
   custom_lint: ^0.7.5
   flutter_flavorizr: ^2.3.0
