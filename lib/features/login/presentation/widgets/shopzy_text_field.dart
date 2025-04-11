@@ -46,6 +46,21 @@ class ShopzyTextField extends StatefulWidget {
       ]),
     );
   }
+  factory ShopzyTextField.confirmPassword() {
+    return ShopzyTextField._(
+      textFieldName: 'confirm_password',
+      hintText: 'Confirm password',
+      obscureText: true,
+      showPasswordToggle: true,
+      fieldValidator: FormBuilderValidators.compose([
+        FormBuilderValidators.required(),
+        FormBuilderValidators.minLength(
+          6,
+          errorText: 'Password must be at least 6 characters',
+        ),
+      ]),
+    );
+  }
 
   @override
   State<ShopzyTextField> createState() => _ShopzyTextFieldState();

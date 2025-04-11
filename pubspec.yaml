@@ -36,6 +36,7 @@ dependencies:
   q_architecture: ^1.0.4
   retrofit: ^4.4.2
   sentry_flutter: ^8.14.1
+  supabase_auth_ui: ^0.5.4
   supabase_flutter: ^2.8.4
 
 dev_dependencies:
