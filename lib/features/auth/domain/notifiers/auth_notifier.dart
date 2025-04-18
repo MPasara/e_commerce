@@ -2,15 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/q_architecture.dart';
-
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
-import 'package:shopzy/features/home/presentation/home_page.dart';
-import 'package:shopzy/features/login/presentation/login_page.dart';
 import 'package:shopzy/features/auth/data/repository/auth_repository.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_state.dart';
+import 'package:shopzy/features/home/presentation/home_page.dart';
+import 'package:shopzy/features/login/presentation/login_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
   () => AuthNotifier(),
+  name: 'Authentication Notifier Provider',
 );
 
 class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
@@ -67,10 +68,57 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
     );
   }
 
+  Future<void> socialLogin() async {
+    showGlobalLoading();
+    state = AuthState.authenticating();
+
+    final result = await _authRepository.socialLogin();
+
+    result.fold(
+      (failure) {
+        setGlobalFailure(failure);
+        state = AuthState.unauthenticated();
+        _routerListener?.call();
+      },
+      (_) {
+        clearGlobalLoading();
+        state = AuthState.authenticated();
+        _routerListener?.call();
+      },
+    );
+  }
+
+  Future<void> socialSignUp() async {
+    showGlobalLoading();
+    state = AuthState.authenticating();
+
+    final result = await _authRepository.socialSignUp();
+
+    result.fold(
+      (failure) {
+        setGlobalFailure(failure);
+        state = AuthState.unauthenticated();
+        _routerListener?.call();
+      },
+      (_) {
+        clearGlobalLoading();
+        state = AuthState.authenticated();
+        _routerListener?.call();
+      },
+    );
+  }
+
   Future<void> logout() async {
-    await 500.milliseconds;
-    state = AuthState.unauthenticated();
-    _routerListener?.call();
+    try {
+      await supabase.Supabase.instance.client.auth.signOut();
+      state = AuthState.unauthenticated();
+      _routerListener?.call();
+    } catch (e) {
+      debugPrint('Logout failed: $e');
+
+      state = AuthState.unauthenticated();
+      _routerListener?.call();
+    }
   }
 
   String? redirect({

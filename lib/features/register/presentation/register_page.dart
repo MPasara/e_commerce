@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loggy/loggy.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
@@ -164,16 +165,17 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ],
                       colored: true,
                       socialButtonVariant: SocialButtonVariant.icon,
-
                       redirectUrl:
                           kIsWeb
                               ? null
-                              : 'io.supabase.flutter://reset-callback/',
-                      onSuccess: (Session response) {
-                        // do something, for example: navigate('home');
-                      },
+                              : 'io.supabase.flutter://login-callback/',
+                      onSuccess:
+                          (_) =>
+                              ref
+                                  .read(authNotifierProvider.notifier)
+                                  .socialSignUp(),
                       onError: (error) {
-                        // do something, for example: navigate("wait_for_email");
+                        logDebug('Google sign-up error: $error');
                       },
                     ),
                   ),

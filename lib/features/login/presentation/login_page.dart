@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loggy/loggy.dart';
 import 'package:shopzy/common/domain/router/navigation_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
@@ -82,6 +83,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         !_isFormValid
                             ? null
                             : () {
+                              FocusManager.instance.primaryFocus?.unfocus();
                               if (_formKey.currentState?.saveAndValidate() ??
                                   false) {
                                 final email =
@@ -128,18 +130,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         OAuthProvider.google,
                         if (Platform.isIOS) OAuthProvider.apple,
                       ],
+                      showSuccessSnackBar: false,
                       colored: true,
                       socialButtonVariant: SocialButtonVariant.icon,
-
                       redirectUrl:
                           kIsWeb
                               ? null
-                              : 'io.supabase.flutter://reset-callback/',
-                      onSuccess: (Session response) {
-                        // do something, for example: navigate('home');
-                      },
+                              : 'io.supabase.flutter://login-callback/',
+                      onSuccess:
+                          (_) =>
+                              ref
+                                  .read(authNotifierProvider.notifier)
+                                  .socialLogin(),
                       onError: (error) {
-                        // do something, for example: navigate("wait_for_email");
+                        logDebug('sign-in error: $error');
                       },
                     ),
                   ),

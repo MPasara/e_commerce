@@ -1,14 +1,12 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
-import 'package:shopzy/features/home/presentation/home_page.dart';
 import 'package:shopzy/common/domain/router/base_router.dart';
 import 'package:shopzy/common/domain/router/go_router_router.dart';
 import 'package:shopzy/common/domain/router/routes.dart';
+import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
+import 'package:shopzy/features/home/presentation/home_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
