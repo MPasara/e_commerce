@@ -1,16 +1,14 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:shopzy/common/data/services/database_service.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
-import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   static const routeName = '/register';
@@ -24,6 +22,7 @@ class RegisterPage extends ConsumerStatefulWidget {
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _isFormValid = false;
+  bool _isProcessing = false;
 
   void _onFormChanged() {
     final emailValue = _formKey.currentState?.fields['email']?.value as String?;
@@ -38,6 +37,32 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           passwordValue?.isNotEmpty == true &&
           confirmPasswordValue?.isNotEmpty == true;
     });
+  }
+
+  Future<void> _handleGoogleSignUp() async {
+    if (_isProcessing) return;
+
+    setState(() => _isProcessing = true);
+    try {
+      await ref
+          .read(authNotifierProvider.notifier)
+          .socialSignUp(provider: AuthProvider.google);
+    } finally {
+      if (mounted) setState(() => _isProcessing = false);
+    }
+  }
+
+  Future<void> _handleAppleSignUp() async {
+    if (_isProcessing) return;
+
+    setState(() => _isProcessing = true);
+    try {
+      await ref
+          .read(authNotifierProvider.notifier)
+          .socialSignUp(provider: AuthProvider.apple);
+    } finally {
+      if (mounted) setState(() => _isProcessing = false);
+    }
   }
 
   @override
@@ -97,44 +122,52 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   spacing70,
                   ShopzyButton.primary(
                     onPressed:
-                        !_isFormValid
+                        !_isFormValid || _isProcessing
                             ? null
-                            : () {
+                            : () async {
                               if (_formKey.currentState?.saveAndValidate() ??
                                   false) {
-                                final email =
-                                    _formKey
-                                            .currentState
-                                            ?.fields['email']
-                                            ?.value
-                                        as String;
-                                final password =
-                                    _formKey
-                                            .currentState
-                                            ?.fields['password']
-                                            ?.value
-                                        as String;
-                                final confirmPassword =
-                                    _formKey
-                                            .currentState
-                                            ?.fields['confirm_password']
-                                            ?.value
-                                        as String;
+                                setState(() => _isProcessing = true);
 
-                                final passwordError = _validateConfirmPassword(
-                                  confirmPassword,
-                                );
-                                if (passwordError != null) {
-                                  _formKey
-                                      .currentState
-                                      ?.fields['confirm_password']
-                                      ?.invalidate(passwordError);
-                                  return;
+                                try {
+                                  final email =
+                                      _formKey
+                                              .currentState
+                                              ?.fields['email']
+                                              ?.value
+                                          as String;
+                                  final password =
+                                      _formKey
+                                              .currentState
+                                              ?.fields['password']
+                                              ?.value
+                                          as String;
+                                  final confirmPassword =
+                                      _formKey
+                                              .currentState
+                                              ?.fields['confirm_password']
+                                              ?.value
+                                          as String;
+
+                                  final passwordError =
+                                      _validateConfirmPassword(confirmPassword);
+                                  if (passwordError != null) {
+                                    _formKey
+                                        .currentState
+                                        ?.fields['confirm_password']
+                                        ?.invalidate(passwordError);
+                                    setState(() => _isProcessing = false);
+                                    return;
+                                  }
+
+                                  await ref
+                                      .read(authNotifierProvider.notifier)
+                                      .signUp(email: email, password: password);
+                                } finally {
+                                  if (mounted) {
+                                    setState(() => _isProcessing = false);
+                                  }
                                 }
-
-                                ref
-                                    .read(authNotifierProvider.notifier)
-                                    .login(email: email, password: password);
                               }
                             },
                     text: 'Register',
@@ -158,27 +191,39 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                   spacing16,
                   Center(
-                    child: SupaSocialsAuth(
-                      socialProviders: [
-                        OAuthProvider.google,
-                        if (Platform.isIOS) OAuthProvider.apple,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.g_mobiledata),
+                          label: Text('Google'),
+                          onPressed: _isProcessing ? null : _handleGoogleSignUp,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                          ),
+                        ),
+                        spacing16,
+
+                        if (Platform.isIOS)
+                          ElevatedButton.icon(
+                            icon: Icon(Icons.apple),
+                            label: Text('Apple'),
+                            onPressed:
+                                _isProcessing ? null : _handleAppleSignUp,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
                       ],
-                      colored: true,
-                      socialButtonVariant: SocialButtonVariant.icon,
-                      redirectUrl:
-                          kIsWeb
-                              ? null
-                              : 'io.supabase.flutter://login-callback/',
-                      onSuccess:
-                          (_) =>
-                              ref
-                                  .read(authNotifierProvider.notifier)
-                                  .socialSignUp(),
-                      onError: (error) {
-                        logDebug('Google sign-up error: $error');
-                      },
                     ),
                   ),
+                  if (_isProcessing)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                 ],
               ),
             ),

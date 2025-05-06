@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:shopzy/common/data/services/database_service.dart';
 import 'package:shopzy/common/domain/router/navigation_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
@@ -12,7 +11,6 @@ import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
 import 'package:shopzy/features/register/presentation/register_page.dart';
 import 'package:shopzy/features/reset_password/presentation/reset_password_page.dart';
-import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   static const routeName = '/login';
@@ -26,6 +24,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _isFormValid = false;
+  bool _isProcessing = false;
 
   void _onFormChanged() {
     final emailValue = _formKey.currentState?.fields['email']?.value as String?;
@@ -36,6 +35,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       _isFormValid =
           emailValue?.isNotEmpty == true && passwordValue?.isNotEmpty == true;
     });
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    if (_isProcessing) return;
+
+    setState(() => _isProcessing = true);
+    try {
+      await ref
+          .read(authNotifierProvider.notifier)
+          .socialLogin(provider: AuthProvider.google);
+    } finally {
+      if (mounted) setState(() => _isProcessing = false);
+    }
+  }
+
+  Future<void> _handleAppleSignIn() async {
+    if (_isProcessing) return;
+
+    setState(() => _isProcessing = true);
+    try {
+      await ref
+          .read(authNotifierProvider.notifier)
+          .socialLogin(provider: AuthProvider.apple);
+    } finally {
+      if (mounted) setState(() => _isProcessing = false);
+    }
   }
 
   @override
@@ -80,28 +105,36 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                   ShopzyButton.primary(
                     onPressed:
-                        !_isFormValid
+                        !_isFormValid || _isProcessing
                             ? null
-                            : () {
+                            : () async {
                               FocusManager.instance.primaryFocus?.unfocus();
                               if (_formKey.currentState?.saveAndValidate() ??
                                   false) {
-                                final email =
-                                    _formKey
-                                            .currentState
-                                            ?.fields['email']
-                                            ?.value
-                                        as String;
-                                final password =
-                                    _formKey
-                                            .currentState
-                                            ?.fields['password']
-                                            ?.value
-                                        as String;
+                                setState(() => _isProcessing = true);
 
-                                ref
-                                    .read(authNotifierProvider.notifier)
-                                    .login(email: email, password: password);
+                                try {
+                                  final email =
+                                      _formKey
+                                              .currentState
+                                              ?.fields['email']
+                                              ?.value
+                                          as String;
+                                  final password =
+                                      _formKey
+                                              .currentState
+                                              ?.fields['password']
+                                              ?.value
+                                          as String;
+
+                                  await ref
+                                      .read(authNotifierProvider.notifier)
+                                      .login(email: email, password: password);
+                                } finally {
+                                  if (mounted) {
+                                    setState(() => _isProcessing = false);
+                                  }
+                                }
                               }
                             },
                     text: 'Sign in',
@@ -125,28 +158,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                   spacing16,
                   Center(
-                    child: SupaSocialsAuth(
-                      socialProviders: [
-                        OAuthProvider.google,
-                        if (Platform.isIOS) OAuthProvider.apple,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.g_mobiledata),
+                          label: Text('Google'),
+                          onPressed: _isProcessing ? null : _handleGoogleSignIn,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                          ),
+                        ),
+                        spacing16,
+
+                        if (Platform.isIOS)
+                          ElevatedButton.icon(
+                            icon: Icon(Icons.apple),
+                            label: Text('Apple'),
+                            onPressed:
+                                _isProcessing ? null : _handleAppleSignIn,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
                       ],
-                      showSuccessSnackBar: false,
-                      colored: true,
-                      socialButtonVariant: SocialButtonVariant.icon,
-                      redirectUrl:
-                          kIsWeb
-                              ? null
-                              : 'io.supabase.flutter://login-callback/',
-                      onSuccess:
-                          (_) =>
-                              ref
-                                  .read(authNotifierProvider.notifier)
-                                  .socialLogin(),
-                      onError: (error) {
-                        logDebug('sign-in error: $error');
-                      },
                     ),
                   ),
+                  if (_isProcessing)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                 ],
               ),
             ),
@@ -159,22 +203,28 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed: () {
-                    ref.pushNamed(
-                      '${LoginPage.routeName}${ResetPasswordPage.routeName}',
-                    );
-                  },
+                  onPressed:
+                      _isProcessing
+                          ? null
+                          : () {
+                            ref.pushNamed(
+                              '${LoginPage.routeName}${ResetPasswordPage.routeName}',
+                            );
+                          },
                   child: Text(
                     'Forgot Password',
                     style: TextStyle(color: Color(0xff0C1A30)),
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    ref.pushNamed(
-                      '${LoginPage.routeName}${RegisterPage.routeName}',
-                    );
-                  },
+                  onPressed:
+                      _isProcessing
+                          ? null
+                          : () {
+                            ref.pushNamed(
+                              '${LoginPage.routeName}${RegisterPage.routeName}',
+                            );
+                          },
                   child: Text(
                     'Sign Up',
                     style: TextStyle(color: Color(0xff3669C9)),

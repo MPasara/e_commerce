@@ -59,7 +59,7 @@ class ShopzyButton extends StatelessWidget {
         disabledBackgroundColor: disabledBackgroundColor,
         minimumSize: Size(double.infinity, height),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
           side:
               borderColor != null
                   ? BorderSide(color: borderColor!)
