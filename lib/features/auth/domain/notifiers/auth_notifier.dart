@@ -82,7 +82,6 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
   }
 
   Future<void> socialLogin({required AuthProvider provider}) async {
-    showGlobalLoading();
     state = AuthState.authenticating();
 
     try {
