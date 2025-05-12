@@ -11,6 +11,7 @@ import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
 import 'package:shopzy/features/register/presentation/register_page.dart';
 import 'package:shopzy/features/reset_password/presentation/reset_password_page.dart';
+import 'package:shopzy/generated/l10n.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   static const routeName = '/login';
@@ -76,12 +77,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome back to Shopzy',
+                    S.current.loginWelcomeTitle,
                     style: TextStyle(color: Color(0xff0C1A30), fontSize: 25),
                   ),
                   spacing20,
                   Text(
-                    'Please enter your login details',
+                    S.current.loginSubtitle,
                     style: TextStyle(color: Color(0xff838589)),
                   ),
                   spacing70,
@@ -91,11 +92,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Email'),
+                        Text(S.current.emailLabel),
                         spacing20,
                         ShopzyTextField.email(),
                         spacing30,
-                        Text('Password'),
+                        Text(S.current.passwordLabel),
                         spacing20,
                         ShopzyTextField.password(),
                       ],
@@ -137,7 +138,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 }
                               }
                             },
-                    text: 'Sign in',
+                    text: S.current.signInButton,
                   ),
                   spacing16,
                   Row(
@@ -146,7 +147,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          'OR',
+                          S.current.orDivider,
                           style: TextStyle(
                             color: Color(0xff838589),
                             fontSize: 14,
@@ -163,7 +164,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       children: [
                         ElevatedButton.icon(
                           icon: Icon(Icons.g_mobiledata),
-                          label: Text('Google'),
+                          label: Text(S.current.googleSignIn),
                           onPressed: _isProcessing ? null : _handleGoogleSignIn,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -175,7 +176,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         if (Platform.isIOS)
                           ElevatedButton.icon(
                             icon: Icon(Icons.apple),
-                            label: Text('Apple'),
+                            label: Text(S.current.appleSignIn),
                             onPressed:
                                 _isProcessing ? null : _handleAppleSignIn,
                             style: ElevatedButton.styleFrom(
@@ -212,7 +213,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             );
                           },
                   child: Text(
-                    'Forgot Password',
+                    S.current.forgotPassword,
                     style: TextStyle(color: Color(0xff0C1A30)),
                   ),
                 ),
@@ -226,7 +227,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             );
                           },
                   child: Text(
-                    'Sign Up',
+                    S.current.signUp,
                     style: TextStyle(color: Color(0xff3669C9)),
                   ),
                 ),

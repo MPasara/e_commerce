@@ -35,7 +35,6 @@ Future<void> mainCommon(AppEnvironment environment) async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  
   await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnonKey);
 
   runApp(
@@ -73,6 +72,8 @@ class _RootAppWidgetState extends ConsumerState<RootAppWidget> {
       theme: primaryTheme,
       darkTheme: secondaryTheme,
       themeMode: ThemeMode.system,
+      locale: const Locale('en'),
+      supportedLocales: const [Locale('en'), Locale('hr')],
       localizationsDelegates: [
         S.delegate,
         ...GlobalMaterialLocalizations.delegates,

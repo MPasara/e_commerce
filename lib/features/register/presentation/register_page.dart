@@ -9,6 +9,7 @@ import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
+import 'package:shopzy/generated/l10n.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   static const routeName = '/register';
@@ -85,7 +86,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ),
                       spacing16,
                       Text(
-                        'Register Account',
+                        S.current.registerTitle,
                         style: TextStyle(
                           color: Color(0xff0C1A30),
                           fontSize: 25,
@@ -95,7 +96,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                   spacing20,
                   Text(
-                    'Enter Email and Password to register',
+                    S.current.registerSubtitle,
                     style: TextStyle(color: Color(0xff0C1A30)),
                   ),
                   spacing50,
@@ -105,15 +106,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Email'),
+                        Text(S.current.emailLabel),
                         spacing20,
                         ShopzyTextField.email(),
                         spacing30,
-                        Text('Password'),
+                        Text(S.current.passwordLabel),
                         spacing20,
                         ShopzyTextField.password(),
                         spacing30,
-                        Text('Confirm Password'),
+                        Text(S.current.confirmPasswordLabel),
                         spacing20,
                         ShopzyTextField.confirmPassword(),
                       ],
@@ -170,7 +171,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 }
                               }
                             },
-                    text: 'Register',
+                    text: S.current.registerButton,
                   ),
                   spacing16,
                   Row(
@@ -179,7 +180,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          'OR',
+                          S.current.orDivider,
                           style: TextStyle(
                             color: Color(0xff838589),
                             fontSize: 14,
@@ -196,7 +197,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       children: [
                         ElevatedButton.icon(
                           icon: Icon(Icons.g_mobiledata),
-                          label: Text('Google'),
+                          label: Text(S.current.googleSignIn),
                           onPressed: _isProcessing ? null : _handleGoogleSignUp,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -208,7 +209,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         if (Platform.isIOS)
                           ElevatedButton.icon(
                             icon: Icon(Icons.apple),
-                            label: Text('Apple'),
+                            label: Text(S.current.appleSignIn),
                             onPressed:
                                 _isProcessing ? null : _handleAppleSignUp,
                             style: ElevatedButton.styleFrom(
@@ -235,13 +236,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   String? _validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'This field is required';
+      return S.current.requiredFieldError;
     }
 
     final password =
         _formKey.currentState?.fields['password']?.value as String?;
     if (password != value) {
-      return 'Passwords do not match';
+      return S.current.passwordsDoNotMatch;
     }
 
     return null;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:shopzy/generated/l10n.dart';
 
 class ShopzyTextField extends StatefulWidget {
   const ShopzyTextField._({
@@ -22,7 +23,7 @@ class ShopzyTextField extends StatefulWidget {
   factory ShopzyTextField.email() {
     return ShopzyTextField._(
       textFieldName: 'email',
-      hintText: 'example@email.com',
+      hintText: S.current.emailHint,
       keyboardType: TextInputType.emailAddress,
       fieldValidator: FormBuilderValidators.compose([
         FormBuilderValidators.required(),
@@ -34,29 +35,30 @@ class ShopzyTextField extends StatefulWidget {
   factory ShopzyTextField.password() {
     return ShopzyTextField._(
       textFieldName: 'password',
-      hintText: 'Enter account password',
+      hintText: S.current.passwordHint,
       obscureText: true,
       showPasswordToggle: true,
       fieldValidator: FormBuilderValidators.compose([
         FormBuilderValidators.required(),
         FormBuilderValidators.minLength(
           6,
-          errorText: 'Password must be at least 6 characters',
+          errorText: S.current.passwordValidationError,
         ),
       ]),
     );
   }
+
   factory ShopzyTextField.confirmPassword() {
     return ShopzyTextField._(
       textFieldName: 'confirm_password',
-      hintText: 'Confirm password',
+      hintText: S.current.confirmPasswordHint,
       obscureText: true,
       showPasswordToggle: true,
       fieldValidator: FormBuilderValidators.compose([
         FormBuilderValidators.required(),
         FormBuilderValidators.minLength(
           6,
-          errorText: 'Password must be at least 6 characters',
+          errorText: S.current.passwordValidationError,
         ),
       ]),
     );

@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
+// This is a library that provides messages for a hr locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -18,46 +18,47 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'en';
+  String get localeName => 'hr';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
         "confirmPasswordHint":
-            MessageLookupByLibrary.simpleMessage("Confirm password"),
+            MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
         "confirmPasswordLabel":
-            MessageLookupByLibrary.simpleMessage("Confirm Password"),
-        "emailHint": MessageLookupByLibrary.simpleMessage("example@email.com"),
-        "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
+            MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
+        "emailHint": MessageLookupByLibrary.simpleMessage("primjer@email.com"),
+        "emailLabel": MessageLookupByLibrary.simpleMessage("E-pošta"),
         "forgotPassword":
-            MessageLookupByLibrary.simpleMessage("Forgot Password"),
+            MessageLookupByLibrary.simpleMessage("Zaboravljena lozinka"),
         "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
         "loginFailed": MessageLookupByLibrary.simpleMessage(
-            "Login failed: No session created"),
+            "Prijava nije uspjela: Sesija nije kreirana"),
         "loginSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Please enter your login details"),
+            "Molimo unesite svoje podatke za prijavu"),
         "loginWelcomeTitle":
-            MessageLookupByLibrary.simpleMessage("Welcome back to Shopzy"),
-        "orDivider": MessageLookupByLibrary.simpleMessage("OR"),
+            MessageLookupByLibrary.simpleMessage("Dobrodošli natrag u Shopzy"),
+        "orDivider": MessageLookupByLibrary.simpleMessage("ILI"),
         "passwordHint":
-            MessageLookupByLibrary.simpleMessage("Enter account password"),
-        "passwordLabel": MessageLookupByLibrary.simpleMessage("Password"),
+            MessageLookupByLibrary.simpleMessage("Unesite lozinku računa"),
+        "passwordLabel": MessageLookupByLibrary.simpleMessage("Lozinka"),
         "passwordValidationError": MessageLookupByLibrary.simpleMessage(
-            "Password must be at least 6 characters"),
+            "Lozinka mora imati najmanje 6 znakova"),
         "passwordsDoNotMatch":
-            MessageLookupByLibrary.simpleMessage("Passwords do not match"),
-        "registerButton": MessageLookupByLibrary.simpleMessage("Register"),
+            MessageLookupByLibrary.simpleMessage("Lozinke se ne podudaraju"),
+        "registerButton":
+            MessageLookupByLibrary.simpleMessage("Registriraj se"),
         "registerSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Enter Email and Password to register"),
+            "Unesite e-poštu i lozinku za registraciju"),
         "registerTitle":
-            MessageLookupByLibrary.simpleMessage("Register Account"),
+            MessageLookupByLibrary.simpleMessage("Registracija računa"),
         "requiredFieldError":
-            MessageLookupByLibrary.simpleMessage("This field is required"),
-        "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
-        "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
+            MessageLookupByLibrary.simpleMessage("Ovo polje je obavezno"),
+        "signInButton": MessageLookupByLibrary.simpleMessage("Prijavi se"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Registriraj se"),
         "signUpFailed": MessageLookupByLibrary.simpleMessage(
-            "Sign up failed: No session created"),
-        "socialSignInFailed":
-            MessageLookupByLibrary.simpleMessage("Social sign-in failed")
+            "Registracija nije uspjela: Sesija nije kreirana"),
+        "socialSignInFailed": MessageLookupByLibrary.simpleMessage(
+            "Društvena prijava nije uspjela")
       };
 }

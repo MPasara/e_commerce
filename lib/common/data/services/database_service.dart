@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shopzy/generated/l10n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final databaseServiceProvider = Provider<DatabaseService>(
@@ -44,7 +45,7 @@ class DatabaseServiceImpl implements DatabaseService {
     );
 
     if (response.session == null) {
-      throw AuthException('Login failed: No session created');
+      throw AuthException(S.current.loginFailed);
     }
   }
 
@@ -59,35 +60,26 @@ class DatabaseServiceImpl implements DatabaseService {
     );
 
     if (response.session == null) {
-      throw AuthException('Sign up failed: No session created');
+      throw AuthException(S.current.signUpFailed);
     }
   }
 
   @override
   Future<void> signInWithSocialProvider(AuthProvider provider) async {
     try {
-      
       if (provider == AuthProvider.apple) {
-       
         final appleProviderInfo = await _client.auth.getOAuthSignInUrl(
           provider: OAuthProvider.apple,
           redirectTo: kIsWeb ? null : 'io.supabase.flutter://login-callback/',
         );
-
-        /* if (appleProviderInfo.isEmpty) {
-          throw AuthException(
-            'Apple login is not configured correctly in Supabase',
-          );
-        } */
       }
 
-     
       await _client.auth.signInWithOAuth(
         provider.toSupabaseProvider(),
         redirectTo: kIsWeb ? null : 'io.supabase.flutter://login-callback/',
       );
     } catch (e) {
-      throw AuthException('Social sign-in failed: $e');
+      throw AuthException(S.current.socialSignInFailed);
     }
   }
 }

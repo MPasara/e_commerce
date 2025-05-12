@@ -1,5 +1,5 @@
 name: shopzy
-description: A new Flutter project.
+description: "A new Flutter project."
 
 publish_to: "none"
 
@@ -47,6 +47,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+  intl_utils: ^2.8.7
   json_serializable: ^6.9.4
   mocktail: ^1.0.4
   pyramid_lint: ^2.0.3
@@ -54,8 +55,8 @@ dev_dependencies:
   riverpod_lint: ^2.6.5
 
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:
     - assets/images/
-

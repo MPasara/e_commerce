@@ -49,6 +49,236 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+
+  /// `example@email.com`
+  String get emailHint {
+    return Intl.message(
+      'example@email.com',
+      name: 'emailHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter account password`
+  String get passwordHint {
+    return Intl.message(
+      'Enter account password',
+      name: 'passwordHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm password`
+  String get confirmPasswordHint {
+    return Intl.message(
+      'Confirm password',
+      name: 'confirmPasswordHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 6 characters`
+  String get passwordValidationError {
+    return Intl.message(
+      'Password must be at least 6 characters',
+      name: 'passwordValidationError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome back to Shopzy`
+  String get loginWelcomeTitle {
+    return Intl.message(
+      'Welcome back to Shopzy',
+      name: 'loginWelcomeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your login details`
+  String get loginSubtitle {
+    return Intl.message(
+      'Please enter your login details',
+      name: 'loginSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get emailLabel {
+    return Intl.message(
+      'Email',
+      name: 'emailLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get passwordLabel {
+    return Intl.message(
+      'Password',
+      name: 'passwordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in`
+  String get signInButton {
+    return Intl.message(
+      'Sign in',
+      name: 'signInButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `OR`
+  String get orDivider {
+    return Intl.message(
+      'OR',
+      name: 'orDivider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google`
+  String get googleSignIn {
+    return Intl.message(
+      'Google',
+      name: 'googleSignIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apple`
+  String get appleSignIn {
+    return Intl.message(
+      'Apple',
+      name: 'appleSignIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot Password`
+  String get forgotPassword {
+    return Intl.message(
+      'Forgot Password',
+      name: 'forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign Up`
+  String get signUp {
+    return Intl.message(
+      'Sign Up',
+      name: 'signUp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Account`
+  String get registerTitle {
+    return Intl.message(
+      'Register Account',
+      name: 'registerTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Email and Password to register`
+  String get registerSubtitle {
+    return Intl.message(
+      'Enter Email and Password to register',
+      name: 'registerSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get confirmPasswordLabel {
+    return Intl.message(
+      'Confirm Password',
+      name: 'confirmPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get registerButton {
+    return Intl.message(
+      'Register',
+      name: 'registerButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field is required`
+  String get requiredFieldError {
+    return Intl.message(
+      'This field is required',
+      name: 'requiredFieldError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get passwordsDoNotMatch {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'passwordsDoNotMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login failed: No session created`
+  String get loginFailed {
+    return Intl.message(
+      'Login failed: No session created',
+      name: 'loginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign up failed: No session created`
+  String get signUpFailed {
+    return Intl.message(
+      'Sign up failed: No session created',
+      name: 'signUpFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social sign-in failed`
+  String get socialSignInFailed {
+    return Intl.message(
+      'Social sign-in failed',
+      name: 'socialSignInFailed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -57,6 +287,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'hr'),
     ];
   }
 
