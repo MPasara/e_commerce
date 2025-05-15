@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/q_architecture.dart';
-import 'package:shopzy/common/data/services/database_service.dart';
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/features/auth/data/repository/auth_repository.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_state.dart';
@@ -81,61 +80,42 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
     _routerListener?.call();
   }
 
-  Future<void> socialLogin({required AuthProvider provider}) async {
+  Future<void> appleLogin() async {
     state = AuthState.authenticating();
+    final result = await _authRepository.appleLogin();
 
-    try {
-      final result = await _authRepository.socialLogin(provider: provider);
-
-      result.fold(
-        (failure) {
-          setGlobalFailure(failure);
-          state = AuthState.unauthenticated();
-          clearGlobalLoading();
-          _routerListener?.call();
-        },
-        (_) {
-          Future.delayed(const Duration(seconds: 30), () {
-            clearGlobalLoading();
-          });
-        },
-      );
-    } catch (e) {
-      debugPrint('Social login error: $e');
-      setGlobalFailure(Failure.generic(title: 'Social login failed: $e'));
-      state = AuthState.unauthenticated();
-      clearGlobalLoading();
-      _routerListener?.call();
-    }
+    result.fold(
+      (failure) {
+        setGlobalFailure(failure);
+        state = AuthState.unauthenticated();
+        clearGlobalLoading();
+        _routerListener?.call();
+      },
+      (response) {
+        state = AuthState.authenticated();
+        clearGlobalLoading();
+        _routerListener?.call();
+      },
+    );
   }
 
-  Future<void> socialSignUp({required AuthProvider provider}) async {
-    showGlobalLoading();
+  Future<void> googleLogin() async {
     state = AuthState.authenticating();
+    final result = await _authRepository.googleLogin();
 
-    try {
-      final result = await _authRepository.socialSignUp(provider: provider);
-
-      result.fold(
-        (failure) {
-          setGlobalFailure(failure);
-          state = AuthState.unauthenticated();
-          clearGlobalLoading();
-          _routerListener?.call();
-        },
-        (_) {
-          Future.delayed(const Duration(seconds: 30), () {
-            clearGlobalLoading();
-          });
-        },
-      );
-    } catch (e) {
-      debugPrint('Social signup error: $e');
-      setGlobalFailure(Failure.generic(title: 'Social signup failed: $e'));
-      state = AuthState.unauthenticated();
-      clearGlobalLoading();
-      _routerListener?.call();
-    }
+    result.fold(
+      (failure) {
+        setGlobalFailure(failure);
+        state = AuthState.unauthenticated();
+        clearGlobalLoading();
+        _routerListener?.call();
+      },
+      (response) {
+        state = AuthState.authenticated();
+        clearGlobalLoading();
+        _routerListener?.call();
+      },
+    );
   }
 
   Future<void> signUp({required String email, required String password}) async {

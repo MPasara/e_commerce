@@ -21,8 +21,8 @@ abstract interface class AuthRepository {
   });
 
   EitherFailureOr<String?> getTokenIfAuthenticated();
-  EitherFailureOr<void> socialLogin({required AuthProvider provider});
-  EitherFailureOr<void> socialSignUp({required AuthProvider provider});
+  EitherFailureOr<void> appleLogin();
+  EitherFailureOr<void> googleLogin();
 }
 
 class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
@@ -60,16 +60,14 @@ class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
   }, errorResolver: GenericErrorResolver());
 
   @override
-  EitherFailureOr<void> socialLogin({required AuthProvider provider}) =>
-      execute(() async {
-        await _databaseService.signInWithSocialProvider(provider);
-        return const Right(null);
-      }, errorResolver: GenericErrorResolver());
+  EitherFailureOr<void> appleLogin() => execute(() async {
+    await _databaseService.signInWithApple();
+    return const Right(null);
+  }, errorResolver: GenericErrorResolver());
 
   @override
-  EitherFailureOr<void> socialSignUp({required AuthProvider provider}) =>
-      execute(() async {
-        await _databaseService.signInWithSocialProvider(provider);
-        return const Right(null);
-      }, errorResolver: GenericErrorResolver());
+  EitherFailureOr<void> googleLogin() => execute(() async {
+    await _databaseService.signInWithGoogle();
+    return const Right(null);
+  }, errorResolver: GenericErrorResolver());
 }

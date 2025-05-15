@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shopzy/common/data/services/database_service.dart';
 import 'package:shopzy/common/domain/router/navigation_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
@@ -36,32 +35,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       _isFormValid =
           emailValue?.isNotEmpty == true && passwordValue?.isNotEmpty == true;
     });
-  }
-
-  Future<void> _handleGoogleSignIn() async {
-    if (_isProcessing) return;
-
-    setState(() => _isProcessing = true);
-    try {
-      await ref
-          .read(authNotifierProvider.notifier)
-          .socialLogin(provider: AuthProvider.google);
-    } finally {
-      if (mounted) setState(() => _isProcessing = false);
-    }
-  }
-
-  Future<void> _handleAppleSignIn() async {
-    if (_isProcessing) return;
-
-    setState(() => _isProcessing = true);
-    try {
-      await ref
-          .read(authNotifierProvider.notifier)
-          .socialLogin(provider: AuthProvider.apple);
-    } finally {
-      if (mounted) setState(() => _isProcessing = false);
-    }
   }
 
   @override
@@ -165,7 +138,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ElevatedButton.icon(
                           icon: Icon(Icons.g_mobiledata),
                           label: Text(S.current.googleSignIn),
-                          onPressed: _isProcessing ? null : _handleGoogleSignIn,
+                          onPressed: () {
+                            ref
+                                .read(authNotifierProvider.notifier)
+                                .googleLogin();
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
@@ -177,8 +154,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           ElevatedButton.icon(
                             icon: Icon(Icons.apple),
                             label: Text(S.current.appleSignIn),
-                            onPressed:
-                                _isProcessing ? null : _handleAppleSignIn,
+                            onPressed: () async {
+                              await ref
+                                  .read(authNotifierProvider.notifier)
+                                  .appleLogin();
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
                               foregroundColor: Colors.white,
