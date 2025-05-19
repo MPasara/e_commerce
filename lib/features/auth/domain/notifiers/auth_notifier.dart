@@ -4,10 +4,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/q_architecture.dart';
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/features/auth/data/repository/auth_repository.dart';
+import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_state.dart';
 import 'package:shopzy/features/home/presentation/home_page.dart';
 import 'package:shopzy/features/login/presentation/login_page.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
   () => AuthNotifier(),
@@ -23,15 +23,18 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
   AuthState prepareForBuild() {
     _authRepository = ref.watch(authRepositoryProvider);
 
-    supabase.Supabase.instance.client.auth.onAuthStateChange.listen((event) {
-      if (event.event == supabase.AuthChangeEvent.signedIn) {
-        state = AuthState.authenticated();
-        clearGlobalLoading();
-        _routerListener?.call();
-      } else if (event.event == supabase.AuthChangeEvent.signedOut) {
-        state = AuthState.unauthenticated();
-        clearGlobalLoading();
-        _routerListener?.call();
+    _authRepository.onAuthStateChange().listen((event) {
+      switch (event) {
+        case AuthStateChange.signedIn:
+          state = AuthState.authenticated();
+          clearGlobalLoading();
+          _routerListener?.call();
+        case AuthStateChange.signedOut:
+          state = AuthState.unauthenticated();
+          clearGlobalLoading();
+          _routerListener?.call();
+        default:
+          break;
       }
     });
 
@@ -142,12 +145,18 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
 
   Future<void> logout() async {
     showGlobalLoading();
-    try {
-      await supabase.Supabase.instance.client.auth.signOut();
-    } catch (e) {
-      debugPrint('Logout failed: $e');
-      clearGlobalLoading();
-    }
+    final result = await _authRepository.logout();
+    result.fold(
+      (failure) {
+        setGlobalFailure(failure);
+        clearGlobalLoading();
+      },
+      (_) {
+        state = AuthState.unauthenticated();
+        clearGlobalLoading();
+        _routerListener?.call();
+      },
+    );
   }
 
   String? redirect({

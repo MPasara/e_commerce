@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/q_architecture.dart';
 import 'package:shopzy/common/data/generic_error_resolver.dart';
 import 'package:shopzy/common/data/services/database_service.dart';
+import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(ref.read(databaseServiceProvider)),
@@ -23,6 +24,8 @@ abstract interface class AuthRepository {
   EitherFailureOr<String?> getTokenIfAuthenticated();
   EitherFailureOr<void> appleLogin();
   EitherFailureOr<void> googleLogin();
+  Stream<AuthStateChange> onAuthStateChange();
+  EitherFailureOr<void> logout();
 }
 
 class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
@@ -68,6 +71,17 @@ class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
   @override
   EitherFailureOr<void> googleLogin() => execute(() async {
     await _databaseService.signInWithGoogle();
+    return const Right(null);
+  }, errorResolver: GenericErrorResolver());
+
+  @override
+  Stream<AuthStateChange> onAuthStateChange() {
+    return _databaseService.onAuthStateChange();
+  }
+
+  @override
+  EitherFailureOr<void> logout() => execute(() async {
+    await _databaseService.logout();
     return const Right(null);
   }, errorResolver: GenericErrorResolver());
 }

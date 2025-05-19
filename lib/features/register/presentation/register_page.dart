@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shopzy/common/presentation/build_context_extensions.dart';
+import 'package:shopzy/common/presentation/form_builder_keys.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
@@ -21,22 +23,51 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormBuilderState>();
-  bool _isFormValid = false;
   bool _isProcessing = false;
+  bool _isFormValid = false;
 
   void _onFormChanged() {
-    final emailValue = _formKey.currentState?.fields['email']?.value as String?;
-    final passwordValue =
-        _formKey.currentState?.fields['password']?.value as String?;
-    final confirmPasswordValue =
-        _formKey.currentState?.fields['confirm_password']?.value as String?;
+    final formState = _formKey.currentState;
+    if (formState == null) return;
 
     setState(() {
-      _isFormValid =
-          emailValue?.isNotEmpty == true &&
-          passwordValue?.isNotEmpty == true &&
-          confirmPasswordValue?.isNotEmpty == true;
+      formState.save();
+      _isFormValid = formState.isValid;
     });
+  }
+
+  Future<void> _handleRegister() async {
+    final formState = _formKey.currentState;
+    if (formState == null || !formState.saveAndValidate()) return;
+
+    setState(() => _isProcessing = true);
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    try {
+      final formData = formState.value;
+      final password = formData[FormBuilderKeys.password] as String;
+      final confirmPassword =
+          formData[FormBuilderKeys.confirmPassword] as String;
+
+      if (password != confirmPassword) {
+        formState.fields[FormBuilderKeys.confirmPassword]?.invalidate(
+          S.current.passwordsDoNotMatch,
+        );
+        setState(() => _isProcessing = false);
+        return;
+      }
+
+      await ref
+          .read(authNotifierProvider.notifier)
+          .signUp(
+            email: formData[FormBuilderKeys.email] as String,
+            password: password,
+          );
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
+    }
   }
 
   @override
@@ -60,17 +91,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       spacing16,
                       Text(
                         S.current.registerTitle,
-                        style: TextStyle(
-                          color: Color(0xff0C1A30),
-                          fontSize: 25,
-                        ),
+                        style: context.appTextStyles.title,
                       ),
                     ],
                   ),
                   spacing20,
                   Text(
                     S.current.registerSubtitle,
-                    style: TextStyle(color: Color(0xff0C1A30)),
+                    style: context.appTextStyles.subtitle?.copyWith(
+                      color: const Color(0xff0C1A30),
+                    ),
                   ),
                   spacing50,
                   FormBuilder(
@@ -79,15 +109,24 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.current.emailLabel),
+                        Text(
+                          S.current.emailLabel,
+                          style: context.appTextStyles.label,
+                        ),
                         spacing20,
                         ShopzyTextField.email(),
                         spacing30,
-                        Text(S.current.passwordLabel),
+                        Text(
+                          S.current.passwordLabel,
+                          style: context.appTextStyles.label,
+                        ),
                         spacing20,
                         ShopzyTextField.password(),
                         spacing30,
-                        Text(S.current.confirmPasswordLabel),
+                        Text(
+                          S.current.confirmPasswordLabel,
+                          style: context.appTextStyles.label,
+                        ),
                         spacing20,
                         ShopzyTextField.confirmPassword(),
                       ],
@@ -96,54 +135,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   spacing70,
                   ShopzyButton.primary(
                     onPressed:
-                        !_isFormValid || _isProcessing
-                            ? null
-                            : () async {
-                              if (_formKey.currentState?.saveAndValidate() ??
-                                  false) {
-                                setState(() => _isProcessing = true);
-
-                                try {
-                                  final email =
-                                      _formKey
-                                              .currentState
-                                              ?.fields['email']
-                                              ?.value
-                                          as String;
-                                  final password =
-                                      _formKey
-                                              .currentState
-                                              ?.fields['password']
-                                              ?.value
-                                          as String;
-                                  final confirmPassword =
-                                      _formKey
-                                              .currentState
-                                              ?.fields['confirm_password']
-                                              ?.value
-                                          as String;
-
-                                  final passwordError =
-                                      _validateConfirmPassword(confirmPassword);
-                                  if (passwordError != null) {
-                                    _formKey
-                                        .currentState
-                                        ?.fields['confirm_password']
-                                        ?.invalidate(passwordError);
-                                    setState(() => _isProcessing = false);
-                                    return;
-                                  }
-
-                                  await ref
-                                      .read(authNotifierProvider.notifier)
-                                      .signUp(email: email, password: password);
-                                } finally {
-                                  if (mounted) {
-                                    setState(() => _isProcessing = false);
-                                  }
-                                }
-                              }
-                            },
+                        !_isFormValid || _isProcessing ? null : _handleRegister,
                     text: S.current.registerButton,
                   ),
                   spacing16,
@@ -154,10 +146,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           S.current.orDivider,
-                          style: TextStyle(
-                            color: Color(0xff838589),
-                            fontSize: 14,
-                          ),
+                          style: context.appTextStyles.divider,
                         ),
                       ),
                       Expanded(child: Divider(color: Color(0xffE5E5E5))),
@@ -169,8 +158,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton.icon(
-                          icon: Icon(Icons.g_mobiledata),
-                          label: Text(S.current.googleSignIn),
+                          icon: Icon(Icons.g_mobiledata, color: Colors.black),
+                          label: Text(
+                            S.current.googleSignIn,
+                            style: context.appTextStyles.button?.copyWith(
+                              color: Colors.black,
+                            ),
+                          ),
                           onPressed: () {
                             ref
                                 .read(authNotifierProvider.notifier)
@@ -185,16 +179,24 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
                         if (Platform.isIOS)
                           ElevatedButton.icon(
-                            icon: Icon(Icons.apple),
-                            label: Text(S.current.appleSignIn),
+                            icon: Icon(
+                              Icons.apple,
+                              color: context.appColors.background,
+                            ),
+                            label: Text(
+                              S.current.appleSignIn,
+                              style: context.appTextStyles.button?.copyWith(
+                                color: context.appColors.background,
+                              ),
+                            ),
                             onPressed: () {
                               ref
                                   .read(authNotifierProvider.notifier)
                                   .appleLogin();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
+                              backgroundColor: context.appColors.secondary,
+                              foregroundColor: context.appColors.background,
                             ),
                           ),
                       ],
@@ -212,19 +214,5 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         ),
       ),
     );
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return S.current.requiredFieldError;
-    }
-
-    final password =
-        _formKey.currentState?.fields['password']?.value as String?;
-    if (password != value) {
-      return S.current.passwordsDoNotMatch;
-    }
-
-    return null;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:shopzy/common/presentation/build_context_extensions.dart';
+import 'package:shopzy/common/presentation/form_builder_keys.dart';
 import 'package:shopzy/generated/l10n.dart';
 
 class ShopzyTextField extends StatefulWidget {
@@ -22,45 +24,36 @@ class ShopzyTextField extends StatefulWidget {
 
   factory ShopzyTextField.email() {
     return ShopzyTextField._(
-      textFieldName: 'email',
+      textFieldName: FormBuilderKeys.email,
       hintText: S.current.emailHint,
       keyboardType: TextInputType.emailAddress,
-      fieldValidator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(),
-        FormBuilderValidators.email(),
-      ]),
+      fieldValidator: FormBuilderValidators.compose(
+        FormValidators.emailValidators,
+      ),
     );
   }
 
   factory ShopzyTextField.password() {
     return ShopzyTextField._(
-      textFieldName: 'password',
+      textFieldName: FormBuilderKeys.password,
       hintText: S.current.passwordHint,
       obscureText: true,
       showPasswordToggle: true,
-      fieldValidator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(),
-        FormBuilderValidators.minLength(
-          6,
-          errorText: S.current.passwordValidationError,
-        ),
-      ]),
+      fieldValidator: FormBuilderValidators.compose(
+        FormValidators.passwordValidators,
+      ),
     );
   }
 
   factory ShopzyTextField.confirmPassword() {
     return ShopzyTextField._(
-      textFieldName: 'confirm_password',
+      textFieldName: FormBuilderKeys.confirmPassword,
       hintText: S.current.confirmPasswordHint,
       obscureText: true,
       showPasswordToggle: true,
-      fieldValidator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(),
-        FormBuilderValidators.minLength(
-          6,
-          errorText: S.current.passwordValidationError,
-        ),
-      ]),
+      fieldValidator: FormBuilderValidators.compose(
+        FormValidators.passwordValidators,
+      ),
     );
   }
 
@@ -85,10 +78,16 @@ class _ShopzyTextFieldState extends State<ShopzyTextField> {
       keyboardType: widget.keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: widget.fieldValidator,
+      style: context.appTextStyles.regular?.copyWith(
+        color: context.appColors.secondary,
+      ),
       decoration: InputDecoration(
         hintText: widget.hintText,
+        hintStyle: context.appTextStyles.regular?.copyWith(
+          color: context.appColors.greyText,
+        ),
         filled: true,
-        fillColor: const Color(0xffFAFAFA),
+        fillColor: context.appColors.appTextFieldFill,
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide.none,
@@ -114,7 +113,7 @@ class _ShopzyTextFieldState extends State<ShopzyTextField> {
                 ? IconButton(
                   icon: Icon(
                     _obscureText ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey,
+                    color: context.appColors.greyText,
                   ),
                   onPressed: () {
                     setState(() {

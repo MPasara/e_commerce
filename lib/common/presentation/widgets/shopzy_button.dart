@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopzy/common/presentation/build_context_extensions.dart';
+import 'package:shopzy/theme/app_colors.dart';
 
 class ShopzyButton extends StatelessWidget {
   const ShopzyButton._({
@@ -25,13 +27,7 @@ class ShopzyButton extends StatelessWidget {
     required VoidCallback? onPressed,
     required String text,
   }) {
-    return ShopzyButton._(
-      key: key,
-      onPressed: onPressed,
-      text: text,
-      backgroundColor: const Color(0xff3669C9),
-      disabledBackgroundColor: const Color(0xffC4C5C4),
-    );
+    return ShopzyButton._(key: key, onPressed: onPressed, text: text);
   }
 
   factory ShopzyButton.secondary({
@@ -52,11 +48,14 @@ class ShopzyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>();
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        disabledBackgroundColor: disabledBackgroundColor,
+        backgroundColor: backgroundColor ?? colors?.appButtonPrimaryBackground,
+        disabledBackgroundColor:
+            disabledBackgroundColor ?? colors?.appButtonDisabled,
         minimumSize: Size(double.infinity, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -69,11 +68,7 @@ class ShopzyButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+        style: context.appTextStyles.button?.copyWith(color: textColor),
       ),
     );
   }

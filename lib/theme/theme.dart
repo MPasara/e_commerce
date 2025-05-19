@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
-
 import 'package:shopzy/theme/app_colors.dart';
 import 'package:shopzy/theme/app_text_styles.dart';
 
+//light mode
 final primaryTheme = _getTheme(
   appColors: AppColors(
     defaultColor: Color(0xFF2196F3),
     secondary: Color(0xFF000000),
-    background: Color(0xFFFFFFFF),
+    background: Color.fromARGB(255, 240, 239, 239),
+    appButtonPrimaryBackground: Color(0xff3669C9),
+    appButtonDisabled: const Color(0xffC4C5C4),
+    appTextFieldFill: Color(0xffFAFAFA),
+    labelGrey: Color(0xff838589),
+    greyText: Color(0xff838589),
+    primaryLink: Color(0xff3669C9),
   ),
 );
 
+//dark mode
 final secondaryTheme = _getTheme(
   appColors: AppColors(
     defaultColor: Color(0xFFFF9800),
     secondary: Color(0xFFFFFFFF),
-    background: Color(0xFF000000),
+    background: Color(0xFF121212),
+    appButtonPrimaryBackground: Color(0xff3669C9),
+    appButtonDisabled: const Color(0xffC4C5C4),
+    appTextFieldFill: Color(0xFF1D1D1D),
+    labelGrey: Color(0xff838589),
+    greyText: Color(0xff838589),
+    primaryLink: Color(0xff3669C9),
   ),
 );
 
@@ -28,13 +41,17 @@ ThemeData _getTheme({required AppColors appColors}) {
     ),
     scaffoldBackgroundColor: appColors.background,
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: appColors.defaultColor,
-      selectionColor: appColors.defaultColor?.withValues(alpha: 0.2),
-      selectionHandleColor: appColors.defaultColor,
+      cursorColor: appColors.secondary,
+      selectionColor: appColors.secondary?.withOpacity(0.2),
+      selectionHandleColor: appColors.secondary,
     ),
     extensions: [
       appColors,
-      getAppTextStyles(defaultColor: appColors.defaultColor!),
+      getAppTextStyles(
+        defaultColor: appColors.defaultColor!,
+        secondaryColor: appColors.secondary!,
+        appColors: appColors,
+      ),
     ],
   );
 }
