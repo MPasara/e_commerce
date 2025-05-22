@@ -20,8 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'hr';
 
+  static String m0(error) => "Odjava nije uspjela: ${error}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
+            "ID token nije pronađen iz generiranih vjerodajnica."),
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
         "confirmPasswordHint":
             MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
@@ -31,7 +35,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "emailLabel": MessageLookupByLibrary.simpleMessage("E-pošta"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Zaboravljena lozinka"),
+        "googleAccessTokenNotFound": MessageLookupByLibrary.simpleMessage(
+            "Token za pristup nije pronađen."),
+        "googleIdTokenNotFound":
+            MessageLookupByLibrary.simpleMessage("ID token nije pronađen."),
         "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
+        "googleSignInCancelled": MessageLookupByLibrary.simpleMessage(
+            "Google prijava je otkazana od strane korisnika."),
         "loginFailed": MessageLookupByLibrary.simpleMessage(
             "Prijava nije uspjela: Sesija nije kreirana"),
         "loginSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -55,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "requiredFieldError":
             MessageLookupByLibrary.simpleMessage("Ovo polje je obavezno"),
         "signInButton": MessageLookupByLibrary.simpleMessage("Prijavi se"),
+        "signOutFailed": m0,
         "signUp": MessageLookupByLibrary.simpleMessage("Registriraj se"),
         "signUpFailed": MessageLookupByLibrary.simpleMessage(
             "Registracija nije uspjela: Sesija nije kreirana"),

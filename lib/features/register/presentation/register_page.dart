@@ -11,6 +11,7 @@ import 'package:shopzy/common/presentation/widgets/shopzy_button.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
 import 'package:shopzy/generated/l10n.dart';
+import 'package:shopzy/theme/app_colors.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   static const routeName = '/register';
@@ -72,6 +73,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>();
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -86,7 +89,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     children: [
                       GestureDetector(
                         onTap: () => context.pop(),
-                        child: Icon(Icons.arrow_back_ios_new),
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: appColors?.secondary,
+                        ),
                       ),
                       spacing16,
                       Text(
@@ -98,9 +104,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   spacing20,
                   Text(
                     S.current.registerSubtitle,
-                    style: context.appTextStyles.subtitle?.copyWith(
-                      color: const Color(0xff0C1A30),
-                    ),
+                    style: context.appTextStyles.subtitle,
                   ),
                   spacing50,
                   FormBuilder(
@@ -128,7 +132,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           style: context.appTextStyles.label,
                         ),
                         spacing20,
-                        ShopzyTextField.confirmPassword(),
+                        Builder(
+                          builder:
+                              (context) => ShopzyTextField.confirmPassword(
+                                FormBuilder.of(context)!,
+                              ),
+                        ),
                       ],
                     ),
                   ),
@@ -141,7 +150,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   spacing16,
                   Row(
                     children: [
-                      Expanded(child: Divider(color: Color(0xffE5E5E5))),
+                      Expanded(child: Divider(color: appColors?.labelGrey)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
@@ -149,7 +158,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           style: context.appTextStyles.divider,
                         ),
                       ),
-                      Expanded(child: Divider(color: Color(0xffE5E5E5))),
+                      Expanded(child: Divider(color: appColors?.labelGrey)),
                     ],
                   ),
                   spacing16,
@@ -158,21 +167,24 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton.icon(
-                          icon: Icon(Icons.g_mobiledata, color: Colors.black),
+                          icon: Icon(
+                            Icons.g_mobiledata,
+                            color: appColors?.black,
+                          ),
                           label: Text(
                             S.current.googleSignIn,
                             style: context.appTextStyles.button?.copyWith(
-                              color: Colors.black,
+                              color: appColors?.black,
                             ),
                           ),
                           onPressed: () {
                             ref
                                 .read(authNotifierProvider.notifier)
-                                .googleLogin();
+                                .socailLogin(isApple: false);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
+                            backgroundColor: appColors?.defaultColor,
+                            foregroundColor: appColors?.defaultColor,
                           ),
                         ),
                         spacing16,
@@ -181,22 +193,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           ElevatedButton.icon(
                             icon: Icon(
                               Icons.apple,
-                              color: context.appColors.background,
+                              color: appColors?.background,
                             ),
                             label: Text(
                               S.current.appleSignIn,
                               style: context.appTextStyles.button?.copyWith(
-                                color: context.appColors.background,
+                                color: appColors?.background,
                               ),
                             ),
                             onPressed: () {
                               ref
                                   .read(authNotifierProvider.notifier)
-                                  .appleLogin();
+                                  .socailLogin(isApple: true);
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: context.appColors.secondary,
-                              foregroundColor: context.appColors.background,
+                              backgroundColor: appColors?.secondary,
+                              foregroundColor: appColors?.background,
                             ),
                           ),
                       ],

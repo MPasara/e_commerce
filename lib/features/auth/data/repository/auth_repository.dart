@@ -22,8 +22,7 @@ abstract interface class AuthRepository {
   });
 
   EitherFailureOr<String?> getTokenIfAuthenticated();
-  EitherFailureOr<void> appleLogin();
-  EitherFailureOr<void> googleLogin();
+  EitherFailureOr<void> socailLogin(bool isApple);
   Stream<AuthStateChange> onAuthStateChange();
   EitherFailureOr<void> logout();
 }
@@ -31,7 +30,7 @@ abstract interface class AuthRepository {
 class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
   final DatabaseService _databaseService;
 
-  AuthRepositoryImpl(this._databaseService);
+  const AuthRepositoryImpl(this._databaseService);
 
   @override
   EitherFailureOr<String?> getTokenIfAuthenticated() => execute(() async {
@@ -63,18 +62,6 @@ class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
   }, errorResolver: GenericErrorResolver());
 
   @override
-  EitherFailureOr<void> appleLogin() => execute(() async {
-    await _databaseService.signInWithApple();
-    return const Right(null);
-  }, errorResolver: GenericErrorResolver());
-
-  @override
-  EitherFailureOr<void> googleLogin() => execute(() async {
-    await _databaseService.signInWithGoogle();
-    return const Right(null);
-  }, errorResolver: GenericErrorResolver());
-
-  @override
   Stream<AuthStateChange> onAuthStateChange() {
     return _databaseService.onAuthStateChange();
   }
@@ -82,6 +69,14 @@ class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
   @override
   EitherFailureOr<void> logout() => execute(() async {
     await _databaseService.logout();
+    return const Right(null);
+  }, errorResolver: GenericErrorResolver());
+
+  @override
+  EitherFailureOr<void> socailLogin(bool isApple) => execute(() async {
+    isApple
+        ? await _databaseService.signInWithApple()
+        : await _databaseService.signInWithGoogle();
     return const Right(null);
   }, errorResolver: GenericErrorResolver());
 }

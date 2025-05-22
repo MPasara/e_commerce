@@ -11,7 +11,6 @@ import 'package:shopzy/common/presentation/app_base_widget.dart';
 import 'package:shopzy/common/utils/custom_provider_observer.dart';
 import 'package:shopzy/common/utils/q_logger.dart';
 import 'package:shopzy/config/env.dart';
-import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/generated/l10n.dart';
 import 'package:shopzy/main/app_environment.dart';
 import 'package:shopzy/theme/theme.dart';
@@ -34,7 +33,6 @@ Future<void> mainCommon(AppEnvironment environment) async {
   }
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
   await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnonKey);
 
   runApp(
@@ -56,10 +54,6 @@ class _RootAppWidgetState extends ConsumerState<RootAppWidget> {
   @override
   void initState() {
     super.initState();
-
-    Future.microtask(() {
-      ref.read(authNotifierProvider.notifier).checkIfAuthenticated();
-    });
   }
 
   @override
@@ -81,12 +75,40 @@ class _RootAppWidgetState extends ConsumerState<RootAppWidget> {
       routerDelegate: baseRouter.routerDelegate,
       routeInformationParser: baseRouter.routeInformationParser,
       routeInformationProvider: baseRouter.routeInformationProvider,
-      builder: (context, child) {
+      /*  builder: (context, child) {
         return Material(
           type: MaterialType.transparency,
           child: AppBaseWidget(child ?? const SizedBox()),
         );
-      },
+      }, */
+      builder:
+          (context, child) => Material(
+            type: MaterialType.transparency,
+            child: AppStartupWidget(onLoaded: (_) => child ?? SizedBox()),
+          ),
+    );
+  }
+}
+
+final _appStartupProvider = FutureProvider((ref) async {
+  // here you can initialize all async dependencies like Firebase, SharedPreferences, etc.
+});
+
+class AppStartupWidget extends ConsumerWidget {
+  final WidgetBuilder onLoaded;
+
+  const AppStartupWidget({super.key, required this.onLoaded});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appStartupState = ref.watch(_appStartupProvider);
+    return appStartupState.when(
+      loading: () => SizedBox(),
+      error:
+          (error, stackTrace) => MaterialApp(
+            home: Scaffold(body: Center(child: Text(error.toString()))),
+          ),
+      data: (_) => AppBaseWidget(onLoaded(context)),
     );
   }
 }

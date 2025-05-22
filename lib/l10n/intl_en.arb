@@ -22,5 +22,10 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "loginFailed": "Login failed: No session created",
     "signUpFailed": "Sign up failed: No session created",
-    "socialSignInFailed": "Social sign-in failed"
+    "socialSignInFailed": "Social sign-in failed",
+    "appleIdTokenNotFound": "Could not find ID Token from generated credential.",
+    "googleSignInCancelled": "Google sign in was cancelled by the user.",
+    "googleAccessTokenNotFound": "No Access Token found.",
+    "googleIdTokenNotFound": "No ID Token found.",
+    "signOutFailed": "Failed to sign out: {error}"
 }

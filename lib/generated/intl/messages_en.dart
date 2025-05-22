@@ -20,8 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(error) => "Failed to sign out: ${error}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
+            "Could not find ID Token from generated credential."),
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
         "confirmPasswordHint":
             MessageLookupByLibrary.simpleMessage("Confirm password"),
@@ -31,7 +35,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "googleAccessTokenNotFound":
+            MessageLookupByLibrary.simpleMessage("No Access Token found."),
+        "googleIdTokenNotFound":
+            MessageLookupByLibrary.simpleMessage("No ID Token found."),
         "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
+        "googleSignInCancelled": MessageLookupByLibrary.simpleMessage(
+            "Google sign in was cancelled by the user."),
         "loginFailed": MessageLookupByLibrary.simpleMessage(
             "Login failed: No session created"),
         "loginSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -54,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "requiredFieldError":
             MessageLookupByLibrary.simpleMessage("This field is required"),
         "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
+        "signOutFailed": m0,
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "signUpFailed": MessageLookupByLibrary.simpleMessage(
             "Sign up failed: No session created"),

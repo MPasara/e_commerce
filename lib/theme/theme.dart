@@ -5,7 +5,7 @@ import 'package:shopzy/theme/app_text_styles.dart';
 //light mode
 final primaryTheme = _getTheme(
   appColors: AppColors(
-    defaultColor: Color(0xFF2196F3),
+    defaultColor: Colors.white,
     secondary: Color(0xFF000000),
     background: Color.fromARGB(255, 240, 239, 239),
     appButtonPrimaryBackground: Color(0xff3669C9),
@@ -14,13 +14,14 @@ final primaryTheme = _getTheme(
     labelGrey: Color(0xff838589),
     greyText: Color(0xff838589),
     primaryLink: Color(0xff3669C9),
+    black: Colors.black,
   ),
 );
 
 //dark mode
 final secondaryTheme = _getTheme(
   appColors: AppColors(
-    defaultColor: Color(0xFFFF9800),
+    defaultColor: Colors.white,
     secondary: Color(0xFFFFFFFF),
     background: Color(0xFF121212),
     appButtonPrimaryBackground: Color(0xff3669C9),
@@ -29,6 +30,7 @@ final secondaryTheme = _getTheme(
     labelGrey: Color(0xff838589),
     greyText: Color(0xff838589),
     primaryLink: Color(0xff3669C9),
+    black: Colors.black,
   ),
 );
 
@@ -42,7 +44,7 @@ ThemeData _getTheme({required AppColors appColors}) {
     scaffoldBackgroundColor: appColors.background,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: appColors.secondary,
-      selectionColor: appColors.secondary?.withOpacity(0.2),
+      selectionColor: appColors.secondary?.withAlpha(51),
       selectionHandleColor: appColors.secondary,
     ),
     extensions: [

@@ -22,5 +22,10 @@
     "passwordsDoNotMatch": "Lozinke se ne podudaraju",
     "loginFailed": "Prijava nije uspjela: Sesija nije kreirana",
     "signUpFailed": "Registracija nije uspjela: Sesija nije kreirana",
-    "socialSignInFailed": "Društvena prijava nije uspjela"
+    "socialSignInFailed": "Društvena prijava nije uspjela",
+    "appleIdTokenNotFound": "ID token nije pronađen iz generiranih vjerodajnica.",
+    "googleSignInCancelled": "Google prijava je otkazana od strane korisnika.",
+    "googleAccessTokenNotFound": "Token za pristup nije pronađen.",
+    "googleIdTokenNotFound": "ID token nije pronađen.",
+    "signOutFailed": "Odjava nije uspjela: {error}"
 } 

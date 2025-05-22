@@ -84,9 +84,7 @@ class DatabaseServiceImpl implements DatabaseService {
 
     final idToken = appleCredentials.identityToken;
     if (idToken == null) {
-      throw const AuthException(
-        'Could not find ID Token from generated credential.',
-      );
+      throw AuthException(S.current.appleIdTokenNotFound);
     }
     await _client.auth.signInWithIdToken(
       provider: OAuthProvider.apple,
@@ -108,16 +106,16 @@ class DatabaseServiceImpl implements DatabaseService {
     );
     final googleUser = await googleSignIn.signIn();
     if (googleUser == null) {
-      throw const AuthException('Google sign in was cancelled by the user.');
+      throw AuthException(S.current.googleSignInCancelled);
     }
     final googleAuth = await googleUser.authentication;
     final accessToken = googleAuth.accessToken;
     final idToken = googleAuth.idToken;
     if (accessToken == null) {
-      throw const AuthException('No Access Token found.');
+      throw AuthException(S.current.googleAccessTokenNotFound);
     }
     if (idToken == null) {
-      throw const AuthException('No ID Token found.');
+      throw AuthException(S.current.googleIdTokenNotFound);
     }
     await _client.auth.signInWithIdToken(
       provider: OAuthProvider.google,
@@ -129,7 +127,7 @@ class DatabaseServiceImpl implements DatabaseService {
   @override
   Stream<AuthStateChange> onAuthStateChange() {
     return _client.auth.onAuthStateChange.map((event) {
-      return AuthStateChange.fromSupabaseEvent(event.event.name);
+      return AuthStateChange.fromSupabaseEvent(event.event);
     });
   }
 
@@ -138,7 +136,7 @@ class DatabaseServiceImpl implements DatabaseService {
     try {
       await _client.auth.signOut();
     } catch (e) {
-      throw AuthException('Failed to sign out: ${e.toString()}');
+      throw AuthException(S.current.signOutFailed(e.toString()));
     }
   }
 }

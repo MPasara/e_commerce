@@ -1,20 +1,20 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 enum AuthStateChange {
   signedIn,
   signedOut,
   tokenRefreshed,
   userUpdated,
-  userDeleted,
   passwordRecovery,
   unknown;
 
-  static AuthStateChange fromSupabaseEvent(String event) {
+  static AuthStateChange fromSupabaseEvent(AuthChangeEvent event) {
     return switch (event) {
-      'SIGNED_IN' => AuthStateChange.signedIn,
-      'SIGNED_OUT' => AuthStateChange.signedOut,
-      'TOKEN_REFRESHED' => AuthStateChange.tokenRefreshed,
-      'USER_UPDATED' => AuthStateChange.userUpdated,
-      'USER_DELETED' => AuthStateChange.userDeleted,
-      'PASSWORD_RECOVERY' => AuthStateChange.passwordRecovery,
+      AuthChangeEvent.signedIn => AuthStateChange.signedIn,
+      AuthChangeEvent.signedOut => AuthStateChange.signedOut,
+      AuthChangeEvent.tokenRefreshed => AuthStateChange.tokenRefreshed,
+      AuthChangeEvent.userUpdated => AuthStateChange.userUpdated,
+      AuthChangeEvent.passwordRecovery => AuthStateChange.passwordRecovery,
       _ => AuthStateChange.unknown,
     };
   }

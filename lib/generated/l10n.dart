@@ -279,6 +279,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Could not find ID Token from generated credential.`
+  String get appleIdTokenNotFound {
+    return Intl.message(
+      'Could not find ID Token from generated credential.',
+      name: 'appleIdTokenNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google sign in was cancelled by the user.`
+  String get googleSignInCancelled {
+    return Intl.message(
+      'Google sign in was cancelled by the user.',
+      name: 'googleSignInCancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Access Token found.`
+  String get googleAccessTokenNotFound {
+    return Intl.message(
+      'No Access Token found.',
+      name: 'googleAccessTokenNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No ID Token found.`
+  String get googleIdTokenNotFound {
+    return Intl.message(
+      'No ID Token found.',
+      name: 'googleIdTokenNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to sign out: {error}`
+  String signOutFailed(Object error) {
+    return Intl.message(
+      'Failed to sign out: $error',
+      name: 'signOutFailed',
+      desc: '',
+      args: [error],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

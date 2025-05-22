@@ -13,6 +13,7 @@ class ShopzyTextField extends StatefulWidget {
     this.obscureText = false,
     this.keyboardType,
     this.showPasswordToggle = false,
+    this.formState,
   });
 
   final String textFieldName;
@@ -21,6 +22,7 @@ class ShopzyTextField extends StatefulWidget {
   final bool obscureText;
   final TextInputType? keyboardType;
   final bool showPasswordToggle;
+  final FormBuilderState? formState;
 
   factory ShopzyTextField.email() {
     return ShopzyTextField._(
@@ -45,15 +47,22 @@ class ShopzyTextField extends StatefulWidget {
     );
   }
 
-  factory ShopzyTextField.confirmPassword() {
+  factory ShopzyTextField.confirmPassword(FormBuilderState formState) {
     return ShopzyTextField._(
       textFieldName: FormBuilderKeys.confirmPassword,
       hintText: S.current.confirmPasswordHint,
       obscureText: true,
       showPasswordToggle: true,
-      fieldValidator: FormBuilderValidators.compose(
-        FormValidators.passwordValidators,
-      ),
+      formState: formState,
+      fieldValidator: FormBuilderValidators.compose([
+        ...FormValidators.passwordValidators,
+        (value) {
+          if (value == null || value.isEmpty) return null;
+          final password = formState.value[FormBuilderKeys.password] as String?;
+          if (password == null || password.isEmpty) return null;
+          return value == password ? null : S.current.passwordsDoNotMatch;
+        },
+      ]),
     );
   }
 

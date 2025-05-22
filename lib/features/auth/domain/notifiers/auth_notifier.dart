@@ -38,7 +38,8 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
       }
     });
 
-    checkIfAuthenticated();
+    Future.microtask(() => checkIfAuthenticated());
+
     return AuthState.initial();
   }
 
@@ -83,28 +84,9 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
     _routerListener?.call();
   }
 
-  Future<void> appleLogin() async {
+  Future<void> socailLogin({required bool isApple}) async {
     state = AuthState.authenticating();
-    final result = await _authRepository.appleLogin();
-
-    result.fold(
-      (failure) {
-        setGlobalFailure(failure);
-        state = AuthState.unauthenticated();
-        clearGlobalLoading();
-        _routerListener?.call();
-      },
-      (response) {
-        state = AuthState.authenticated();
-        clearGlobalLoading();
-        _routerListener?.call();
-      },
-    );
-  }
-
-  Future<void> googleLogin() async {
-    state = AuthState.authenticating();
-    final result = await _authRepository.googleLogin();
+    final result = await _authRepository.socailLogin(isApple);
 
     result.fold(
       (failure) {
