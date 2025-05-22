@@ -84,9 +84,9 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
     _routerListener?.call();
   }
 
-  Future<void> socailLogin({required bool isApple}) async {
+  Future<void> socialLogin({required bool isApple}) async {
     state = AuthState.authenticating();
-    final result = await _authRepository.socailLogin(isApple);
+    final result = await _authRepository.socialLogin(isApple);
 
     result.fold(
       (failure) {

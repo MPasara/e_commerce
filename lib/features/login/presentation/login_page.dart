@@ -147,7 +147,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           onPressed: () async {
                             await ref
                                 .read(authNotifierProvider.notifier)
-                                .socailLogin(isApple: false);
+                                .socialLogin(isApple: false);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: appColors?.defaultColor,
@@ -171,7 +171,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             onPressed: () async {
                               await ref
                                   .read(authNotifierProvider.notifier)
-                                  .socailLogin(isApple: true);
+                                  .socialLogin(isApple: true);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: appColors?.secondary,

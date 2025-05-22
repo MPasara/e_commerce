@@ -22,7 +22,7 @@ abstract interface class AuthRepository {
   });
 
   EitherFailureOr<String?> getTokenIfAuthenticated();
-  EitherFailureOr<void> socailLogin(bool isApple);
+  EitherFailureOr<void> socialLogin(bool isApple);
   Stream<AuthStateChange> onAuthStateChange();
   EitherFailureOr<void> logout();
 }
@@ -73,7 +73,7 @@ class AuthRepositoryImpl with ErrorToFailureMixin implements AuthRepository {
   }, errorResolver: GenericErrorResolver());
 
   @override
-  EitherFailureOr<void> socailLogin(bool isApple) => execute(() async {
+  EitherFailureOr<void> socialLogin(bool isApple) => execute(() async {
     isApple
         ? await _databaseService.signInWithApple()
         : await _databaseService.signInWithGoogle();

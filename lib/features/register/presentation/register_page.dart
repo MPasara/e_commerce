@@ -47,16 +47,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     try {
       final formData = formState.value;
       final password = formData[FormBuilderKeys.password] as String;
-      final confirmPassword =
-          formData[FormBuilderKeys.confirmPassword] as String;
-
-      if (password != confirmPassword) {
-        formState.fields[FormBuilderKeys.confirmPassword]?.invalidate(
-          S.current.passwordsDoNotMatch,
-        );
-        setState(() => _isProcessing = false);
-        return;
-      }
 
       await ref
           .read(authNotifierProvider.notifier)
@@ -132,11 +122,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           style: context.appTextStyles.label,
                         ),
                         spacing20,
-                        Builder(
-                          builder:
-                              (context) => ShopzyTextField.confirmPassword(
-                                FormBuilder.of(context)!,
-                              ),
+                        ShopzyTextField.confirmPassword(
+                          (value) =>
+                              value ==
+                                      _formKey
+                                          .currentState
+                                          ?.fields[FormBuilderKeys.password]
+                                          ?.value
+                                  ? null
+                                  : S.current.passwordsDoNotMatch,
                         ),
                       ],
                     ),
@@ -180,7 +174,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           onPressed: () {
                             ref
                                 .read(authNotifierProvider.notifier)
-                                .socailLogin(isApple: false);
+                                .socialLogin(isApple: false);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: appColors?.defaultColor,
@@ -204,7 +198,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             onPressed: () {
                               ref
                                   .read(authNotifierProvider.notifier)
-                                  .socailLogin(isApple: true);
+                                  .socialLogin(isApple: true);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: appColors?.secondary,

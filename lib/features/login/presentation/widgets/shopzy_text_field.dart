@@ -47,21 +47,17 @@ class ShopzyTextField extends StatefulWidget {
     );
   }
 
-  factory ShopzyTextField.confirmPassword(FormBuilderState formState) {
+  factory ShopzyTextField.confirmPassword([
+    String? Function(String?)? validator,
+  ]) {
     return ShopzyTextField._(
       textFieldName: FormBuilderKeys.confirmPassword,
       hintText: S.current.confirmPasswordHint,
       obscureText: true,
       showPasswordToggle: true,
-      formState: formState,
       fieldValidator: FormBuilderValidators.compose([
         ...FormValidators.passwordValidators,
-        (value) {
-          if (value == null || value.isEmpty) return null;
-          final password = formState.value[FormBuilderKeys.password] as String?;
-          if (password == null || password.isEmpty) return null;
-          return value == password ? null : S.current.passwordsDoNotMatch;
-        },
+        if (validator != null) validator,
       ]),
     );
   }
