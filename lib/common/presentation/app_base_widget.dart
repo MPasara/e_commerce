@@ -8,9 +8,6 @@ import 'package:shopzy/common/domain/providers/global_navigation_provider.dart';
 import 'package:shopzy/common/domain/router/route_action.dart';
 import 'package:shopzy/common/presentation/build_context_extensions.dart';
 
-final failureProvider = StateProvider<Failure?>((_) => null);
-final successProvider = StateProvider<String?>((_) => null);
-
 class AppBaseWidget extends ConsumerStatefulWidget {
   final Widget child;
 
@@ -37,31 +34,7 @@ class _AppBaseWidgetState extends ConsumerState<AppBaseWidget> {
     // WidgetsBinding.instance.addPostFrameCallback.
     // final navigatorContext = ref.read(baseRouterProvider).navigatorContext;
     ref.globalNavigationListener();
-    ref.listen<Failure?>(failureProvider, (_, failure) {
-      if (failure == null) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Fluttertoast.showToast(
-          msg: failure.title,
-          toastLength: Toast.LENGTH_LONG,
-          backgroundColor: context.appColors.errorRed,
-          gravity: ToastGravity.SNACKBAR,
-          fontSize: 16,
-        );
-      });
-    });
-    ref.listen(successProvider, (_, message) {
-      if (message == null) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Fluttertoast.showToast(
-          textColor: Colors.black,
-          msg: message,
-          toastLength: Toast.LENGTH_LONG,
-          backgroundColor: context.appColors.successGreen,
-          gravity: ToastGravity.SNACKBAR,
-          fontSize: 16,
-        );
-      });
-    });
+
     return BaseWidget(
       onGlobalFailure: _onGlobalFailure,
       onGlobalInfo: _onGlobalInfo,
@@ -70,6 +43,15 @@ class _AppBaseWidgetState extends ConsumerState<AppBaseWidget> {
   }
 
   void _onGlobalFailure(Failure failure) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Fluttertoast.showToast(
+        msg: failure.title,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: context.appColors.errorRed,
+        gravity: ToastGravity.SNACKBAR,
+        fontSize: 16,
+      );
+    });
     logError('''
         showing ${failure.isCritical ? '' : 'non-'}critical failure with 
         title ${failure.title}, 
@@ -80,6 +62,16 @@ class _AppBaseWidgetState extends ConsumerState<AppBaseWidget> {
   }
 
   void _onGlobalInfo(GlobalInfo globalInfo) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Fluttertoast.showToast(
+        textColor: Colors.black,
+        msg: globalInfo.message,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: context.appColors.successGreen,
+        gravity: ToastGravity.SNACKBAR,
+        fontSize: 16,
+      );
+    });
     logInfo('''
         globalInfoStatus: ${globalInfo.globalInfoStatus}
         title: ${globalInfo.title}, 
