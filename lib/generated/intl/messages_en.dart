@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
             "Could not find ID Token from generated credential."),
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
+        "authSuccess":
+            MessageLookupByLibrary.simpleMessage("Successfully authenticated"),
         "confirmPasswordHint":
             MessageLookupByLibrary.simpleMessage("Confirm password"),
         "confirmPasswordLabel":
@@ -48,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter your login details"),
         "loginWelcomeTitle":
             MessageLookupByLibrary.simpleMessage("Welcome back to Shopzy"),
+        "logoutSuccess":
+            MessageLookupByLibrary.simpleMessage("Successfully logged out"),
         "orDivider": MessageLookupByLibrary.simpleMessage("OR"),
         "passwordHint":
             MessageLookupByLibrary.simpleMessage("Enter account password"),
@@ -68,6 +72,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "signUpFailed": MessageLookupByLibrary.simpleMessage(
             "Sign up failed: No session created"),
+        "sign_up_failed":
+            MessageLookupByLibrary.simpleMessage("Sign up failed"),
+        "sign_up_success":
+            MessageLookupByLibrary.simpleMessage("Signed up successfully"),
         "socialSignInFailed":
             MessageLookupByLibrary.simpleMessage("Social sign-in failed")
       };

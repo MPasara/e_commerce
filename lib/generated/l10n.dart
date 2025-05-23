@@ -329,6 +329,46 @@ class S {
       args: [error],
     );
   }
+
+  /// `Successfully authenticated`
+  String get authSuccess {
+    return Intl.message(
+      'Successfully authenticated',
+      name: 'authSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Successfully logged out`
+  String get logoutSuccess {
+    return Intl.message(
+      'Successfully logged out',
+      name: 'logoutSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign up failed`
+  String get sign_up_failed {
+    return Intl.message(
+      'Sign up failed',
+      name: 'sign_up_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signed up successfully`
+  String get sign_up_success {
+    return Intl.message(
+      'Signed up successfully',
+      name: 'sign_up_success',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

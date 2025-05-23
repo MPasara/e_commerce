@@ -11,6 +11,8 @@ final class AppColors extends ThemeExtension<AppColors> {
   final Color? greyText;
   final Color? primaryLink;
   final Color? black;
+  final Color? errorRed;
+  final Color? successGreen;
 
   const AppColors({
     required this.defaultColor,
@@ -23,6 +25,8 @@ final class AppColors extends ThemeExtension<AppColors> {
     required this.greyText,
     required this.primaryLink,
     required this.black,
+    required this.errorRed,
+    required this.successGreen,
   });
 
   @override
@@ -37,6 +41,8 @@ final class AppColors extends ThemeExtension<AppColors> {
     Color? greyText,
     Color? primaryLink,
     Color? black,
+    Color? errorRed,
+    Color? successGreen,
   }) => AppColors(
     defaultColor: defaultColor ?? this.defaultColor,
     secondary: secondary ?? this.secondary,
@@ -49,6 +55,8 @@ final class AppColors extends ThemeExtension<AppColors> {
     greyText: greyText ?? this.greyText,
     primaryLink: primaryLink ?? this.primaryLink,
     black: black ?? this.black,
+    errorRed: errorRed ?? this.errorRed,
+    successGreen: successGreen ?? this.successGreen,
   );
 
   @override
@@ -73,6 +81,8 @@ final class AppColors extends ThemeExtension<AppColors> {
       greyText: Color.lerp(greyText, other.greyText, t),
       primaryLink: Color.lerp(primaryLink, other.primaryLink, t),
       black: Color.lerp(black, other.black, t),
+      errorRed: Color.lerp(errorRed, other.errorRed, t),
+      successGreen: Color.lerp(successGreen, other.successGreen, t),
     );
   }
 }

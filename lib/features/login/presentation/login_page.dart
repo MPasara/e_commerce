@@ -26,7 +26,6 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormBuilderState>();
-  bool _isProcessing = false;
   bool _isFormValid = false;
 
   void _onFormChanged() {
@@ -43,22 +42,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final formState = _formKey.currentState;
     if (formState == null || !formState.saveAndValidate()) return;
 
-    setState(() => _isProcessing = true);
     FocusManager.instance.primaryFocus?.unfocus();
 
-    try {
-      final formData = formState.value;
-      await ref
-          .read(authNotifierProvider.notifier)
-          .login(
-            email: formData[FormBuilderKeys.email],
-            password: formData[FormBuilderKeys.password],
-          );
-    } finally {
-      if (mounted) {
-        setState(() => _isProcessing = false);
-      }
-    }
+    final formData = formState.value;
+    await ref
+        .read(authNotifierProvider.notifier)
+        .login(
+          email: formData[FormBuilderKeys.email],
+          password: formData[FormBuilderKeys.password],
+        );
   }
 
   @override
@@ -110,8 +102,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   spacing70,
 
                   ShopzyButton.primary(
-                    onPressed:
-                        !_isFormValid || _isProcessing ? null : _handleLogin,
+                    onPressed: !_isFormValid ? null : _handleLogin,
                     text: S.current.signInButton,
                   ),
                   spacing16,
@@ -181,11 +172,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ],
                     ),
                   ),
-                  if (_isProcessing)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
                 ],
               ),
             ),
@@ -198,28 +184,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed:
-                      _isProcessing
-                          ? null
-                          : () {
-                            ref.pushNamed(
-                              '${LoginPage.routeName}${ResetPasswordPage.routeName}',
-                            );
-                          },
+                  onPressed: () {
+                    ref.pushNamed(
+                      '${LoginPage.routeName}${ResetPasswordPage.routeName}',
+                    );
+                  },
                   child: Text(
                     S.current.forgotPassword,
                     style: context.appTextStyles.linkPrimary,
                   ),
                 ),
                 TextButton(
-                  onPressed:
-                      _isProcessing
-                          ? null
-                          : () {
-                            ref.pushNamed(
-                              '${LoginPage.routeName}${RegisterPage.routeName}',
-                            );
-                          },
+                  onPressed: () {
+                    ref.pushNamed(
+                      '${LoginPage.routeName}${RegisterPage.routeName}',
+                    );
+                  },
                   child: Text(
                     S.current.signUp,
                     style: context.appTextStyles.linkPrimary,

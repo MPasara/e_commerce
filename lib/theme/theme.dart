@@ -15,6 +15,8 @@ final primaryTheme = _getTheme(
     greyText: Color(0xff838589),
     primaryLink: Color(0xff3669C9),
     black: Colors.black,
+    errorRed: Colors.redAccent,
+    successGreen: Colors.greenAccent,
   ),
 );
 
@@ -31,6 +33,8 @@ final secondaryTheme = _getTheme(
     greyText: Color(0xff838589),
     primaryLink: Color(0xff3669C9),
     black: Colors.black,
+    errorRed: Colors.redAccent,
+    successGreen: Colors.greenAccent,
   ),
 );
 

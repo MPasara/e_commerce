@@ -24,7 +24,6 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormBuilderState>();
-  bool _isProcessing = false;
   bool _isFormValid = false;
 
   void _onFormChanged() {
@@ -41,24 +40,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final formState = _formKey.currentState;
     if (formState == null || !formState.saveAndValidate()) return;
 
-    setState(() => _isProcessing = true);
     FocusManager.instance.primaryFocus?.unfocus();
 
-    try {
-      final formData = formState.value;
-      final password = formData[FormBuilderKeys.password] as String;
-
-      await ref
-          .read(authNotifierProvider.notifier)
-          .signUp(
-            email: formData[FormBuilderKeys.email] as String,
-            password: password,
-          );
-    } finally {
-      if (mounted) {
-        setState(() => _isProcessing = false);
-      }
-    }
+    final formData = formState.value;
+    await ref
+        .read(authNotifierProvider.notifier)
+        .signUp(
+          email: formData[FormBuilderKeys.email] as String,
+          password: formData[FormBuilderKeys.password] as String,
+        );
   }
 
   @override
@@ -137,8 +127,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                   spacing70,
                   ShopzyButton.primary(
-                    onPressed:
-                        !_isFormValid || _isProcessing ? null : _handleRegister,
+                    onPressed: !_isFormValid ? null : _handleRegister,
                     text: S.current.registerButton,
                   ),
                   spacing16,
@@ -208,11 +197,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ],
                     ),
                   ),
-                  if (_isProcessing)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
                 ],
               ),
             ),

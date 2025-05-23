@@ -64,8 +64,9 @@ class DatabaseServiceImpl implements DatabaseService {
       email: email,
       password: password,
     );
+    final user = response.user;
 
-    if (response.session == null) {
+    if (user == null) {
       throw AuthException(S.current.signUpFailed);
     }
   }

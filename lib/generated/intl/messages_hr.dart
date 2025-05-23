@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
             "ID token nije pronađen iz generiranih vjerodajnica."),
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
+        "authSuccess":
+            MessageLookupByLibrary.simpleMessage("Uspješna autentikacija"),
         "confirmPasswordHint":
             MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
         "confirmPasswordLabel":
@@ -48,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Molimo unesite svoje podatke za prijavu"),
         "loginWelcomeTitle":
             MessageLookupByLibrary.simpleMessage("Dobrodošli natrag u Shopzy"),
+        "logoutSuccess":
+            MessageLookupByLibrary.simpleMessage("Uspješna odjava"),
         "orDivider": MessageLookupByLibrary.simpleMessage("ILI"),
         "passwordHint":
             MessageLookupByLibrary.simpleMessage("Unesite lozinku računa"),

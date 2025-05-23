@@ -27,5 +27,7 @@
     "googleSignInCancelled": "Google prijava je otkazana od strane korisnika.",
     "googleAccessTokenNotFound": "Token za pristup nije pronađen.",
     "googleIdTokenNotFound": "ID token nije pronađen.",
-    "signOutFailed": "Odjava nije uspjela: {error}"
+    "signOutFailed": "Odjava nije uspjela: {error}",
+    "authSuccess": "Uspješna autentikacija",
+    "logoutSuccess": "Uspješna odjava"
 } 

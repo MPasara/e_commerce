@@ -3,11 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/q_architecture.dart';
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
+import 'package:shopzy/common/presentation/app_base_widget.dart';
 import 'package:shopzy/features/auth/data/repository/auth_repository.dart';
 import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_state.dart';
 import 'package:shopzy/features/home/presentation/home_page.dart';
 import 'package:shopzy/features/login/presentation/login_page.dart';
+import 'package:shopzy/generated/l10n.dart';
 
 final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
   () => AuthNotifier(),
@@ -50,6 +52,7 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
       (failure) {
         setGlobalFailure(failure);
         state = AuthState.unauthenticated();
+        ref.read(failureProvider.notifier).state = failure;
       },
       (token) {
         state =
@@ -74,10 +77,14 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
       (failure) {
         setGlobalFailure(failure);
         state = AuthState.unauthenticated();
+        ref.read(failureProvider.notifier).state = Failure(
+          title: S.current.loginFailed,
+        );
         clearGlobalLoading();
       },
       (response) {
         state = AuthState.authenticated();
+        ref.read(successProvider.notifier).state = S.current.authSuccess;
         clearGlobalLoading();
       },
     );
@@ -92,6 +99,9 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
       (failure) {
         setGlobalFailure(failure);
         state = AuthState.unauthenticated();
+        ref.read(failureProvider.notifier).state = Failure(
+          title: S.current.loginFailed,
+        );
         clearGlobalLoading();
         _routerListener?.call();
       },
@@ -99,6 +109,7 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
         state = AuthState.authenticated();
         clearGlobalLoading();
         _routerListener?.call();
+        ref.read(successProvider.notifier).state = S.current.authSuccess;
       },
     );
   }
@@ -115,10 +126,14 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
       (failure) {
         setGlobalFailure(failure);
         state = AuthState.unauthenticated();
+        ref.read(failureProvider.notifier).state = Failure(
+          title: S.current.loginFailed,
+        );
         clearGlobalLoading();
       },
       (response) {
         state = AuthState.authenticated();
+        ref.read(successProvider.notifier).state = S.current.sign_up_success;
         clearGlobalLoading();
       },
     );
@@ -131,10 +146,14 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
     result.fold(
       (failure) {
         setGlobalFailure(failure);
+        ref.read(failureProvider.notifier).state = Failure(
+          title: S.current.signOutFailed(failure.title),
+        );
         clearGlobalLoading();
       },
       (_) {
         state = AuthState.unauthenticated();
+        ref.read(successProvider.notifier).state = S.current.logoutSuccess;
         clearGlobalLoading();
         _routerListener?.call();
       },
