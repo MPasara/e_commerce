@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:q_architecture/q_architecture.dart';
-
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/common/domain/providers/global_navigation_provider.dart';
 import 'package:shopzy/common/domain/router/route_action.dart';
+import 'package:shopzy/common/presentation/build_context_extensions.dart';
 
 class AppBaseWidget extends ConsumerStatefulWidget {
   final Widget child;
@@ -34,6 +34,7 @@ class _AppBaseWidgetState extends ConsumerState<AppBaseWidget> {
     // WidgetsBinding.instance.addPostFrameCallback.
     // final navigatorContext = ref.read(baseRouterProvider).navigatorContext;
     ref.globalNavigationListener();
+
     return BaseWidget(
       onGlobalFailure: _onGlobalFailure,
       onGlobalInfo: _onGlobalInfo,
@@ -42,6 +43,15 @@ class _AppBaseWidgetState extends ConsumerState<AppBaseWidget> {
   }
 
   void _onGlobalFailure(Failure failure) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Fluttertoast.showToast(
+        msg: failure.title,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: context.appColors.errorRed,
+        gravity: ToastGravity.SNACKBAR,
+        fontSize: 16,
+      );
+    });
     logError('''
         showing ${failure.isCritical ? '' : 'non-'}critical failure with 
         title ${failure.title}, 
@@ -52,6 +62,16 @@ class _AppBaseWidgetState extends ConsumerState<AppBaseWidget> {
   }
 
   void _onGlobalInfo(GlobalInfo globalInfo) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Fluttertoast.showToast(
+        textColor: Colors.black,
+        msg: globalInfo.message,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: context.appColors.successGreen,
+        gravity: ToastGravity.SNACKBAR,
+        fontSize: 16,
+      );
+    });
     logInfo('''
         globalInfoStatus: ${globalInfo.globalInfoStatus}
         title: ${globalInfo.title}, 
