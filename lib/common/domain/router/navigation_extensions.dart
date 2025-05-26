@@ -1,11 +1,10 @@
 // ignore_for_file: avoid_dynamic
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:shopzy/features/home/presentation/home_page.dart';
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/common/domain/providers/global_navigation_provider.dart';
-import 'package:shopzy/common/domain/utils/string_extensions.dart';
 import 'package:shopzy/common/domain/router/route_action.dart';
+import 'package:shopzy/common/domain/utils/string_extensions.dart';
+import 'package:shopzy/features/home/presentation/main_page.dart';
 
 extension NavigationExtensions on WidgetRef {
   void pop() =>
@@ -28,7 +27,7 @@ extension NavigationExtensions on WidgetRef {
     final location = read(baseRouterProvider).currentLocationUri;
     final currentRoute = location.path;
     return (
-      currentRouteName: currentRoute == HomePage.routeName ? '' : currentRoute,
+      currentRouteName: currentRoute == MainPage.routeName ? '' : currentRoute,
       queryParameters: location.queryParameters,
     );
   }

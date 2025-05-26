@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:shopzy/common/domain/router/go_router_state_extensions.dart';
+import 'package:shopzy/common/domain/utils/string_extensions.dart';
 import 'package:shopzy/example/example_routes.dart';
-import 'package:shopzy/features/dashboard/presentation/dashboard_page.dart';
+import 'package:shopzy/features/dashboard/presentation/home_page.dart';
 import 'package:shopzy/features/directories/presentation/directories_page.dart';
-import 'package:shopzy/features/home/presentation/home_page.dart';
+import 'package:shopzy/features/home/presentation/main_page.dart';
 import 'package:shopzy/features/login/presentation/login_page.dart';
 import 'package:shopzy/features/notifications/presentation/all_notifications_page.dart';
 import 'package:shopzy/features/notifications/presentation/notification_details_page.dart';
@@ -14,16 +14,14 @@ import 'package:shopzy/features/register/presentation/register_page.dart';
 import 'package:shopzy/features/reset_password/presentation/reset_password_page.dart';
 import 'package:shopzy/features/users/presentation/user_details_page.dart';
 import 'package:shopzy/features/users/presentation/users_page.dart';
-import 'package:shopzy/common/domain/utils/string_extensions.dart';
-import 'package:shopzy/common/domain/router/go_router_state_extensions.dart';
 
 List<RouteBase> getRoutes({
   required GlobalKey<NavigatorState> rootNavigatorKey,
   bool stateful = true,
 }) => [
   GoRoute(
-    path: HomePage.routeName,
-    redirect: (context, state) => DashboardPage.routeName,
+    path: MainPage.routeName,
+    redirect: (context, state) => HomePage.routeName,
   ),
   if (stateful)
     _statefulShellRoute(rootNavigatorKey: rootNavigatorKey)
@@ -50,13 +48,13 @@ RouteBase _statefulShellRoute({
 }) => StatefulShellRoute.indexedStack(
   builder:
       (context, state, navigationShell) =>
-          HomePage(navigationShell: navigationShell),
+          MainPage(navigationShell: navigationShell),
   branches: [
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: DashboardPage.routeName,
-          builder: (context, state) => DashboardPage(),
+          path: HomePage.routeName,
+          builder: (context, state) => HomePage(),
           routes: [
             GoRoute(
               path: UserDetailsPage.routeName.removeLeadingSlash,
@@ -71,7 +69,7 @@ RouteBase _statefulShellRoute({
                   (context, state) => state.redirectIfPathParameterValid<int>(
                     pathParameterName:
                         UserDetailsPage.pathPattern.removeLeadingColon,
-                    redirectTo: DashboardPage.routeName,
+                    redirectTo: HomePage.routeName,
                   ),
             ),
             getExampleRoutes(rootNavigatorKey: rootNavigatorKey),
@@ -193,11 +191,11 @@ RouteBase _statefulShellRoute({
 RouteBase _shellRoute({
   required GlobalKey<NavigatorState> rootNavigatorKey,
 }) => ShellRoute(
-  builder: (context, state, child) => HomePage(child: child),
+  builder: (context, state, child) => MainPage(child: child),
   routes: [
     GoRoute(
-      path: DashboardPage.routeName,
-      builder: (context, state) => DashboardPage(),
+      path: HomePage.routeName,
+      builder: (context, state) => HomePage(),
       routes: [
         GoRoute(
           path: UserDetailsPage.routeName.removeLeadingSlash,
@@ -212,7 +210,7 @@ RouteBase _shellRoute({
               (context, state) => state.redirectIfPathParameterValid<int>(
                 pathParameterName:
                     UserDetailsPage.pathPattern.removeLeadingColon,
-                redirectTo: DashboardPage.routeName,
+                redirectTo: HomePage.routeName,
               ),
         ),
       ],

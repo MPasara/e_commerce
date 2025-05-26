@@ -6,7 +6,7 @@ import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/features/auth/data/repository/auth_repository.dart';
 import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_state.dart';
-import 'package:shopzy/features/home/presentation/home_page.dart';
+import 'package:shopzy/features/home/presentation/main_page.dart';
 import 'package:shopzy/features/login/presentation/login_page.dart';
 import 'package:shopzy/generated/l10n.dart';
 
@@ -198,7 +198,7 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
           _deepLink = null;
           return tmpDeepLink;
         }
-        return HomePage.routeName;
+        return MainPage.routeName;
       }
       return null;
     }
@@ -212,7 +212,7 @@ class AuthNotifier extends SimpleNotifier<AuthState> implements Listenable {
     );
 
     if (isLoggedIn && routeExists) {
-      return authRoutes ? HomePage.routeName : null;
+      return authRoutes ? MainPage.routeName : null;
     }
 
     _deepLink =

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
 import 'package:shopzy/common/domain/router/navigation_extensions.dart';
+import 'package:shopzy/common/presentation/build_context_extensions.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 import 'package:shopzy/features/auth/domain/notifiers/auth_state.dart';
 import 'package:shopzy/features/home/domain/entity/bottom_navigation_item.dart';
 
-class HomePage extends ConsumerWidget {
+class MainPage extends ConsumerWidget {
   static const routeName = '/';
 
   final StatefulNavigationShell? navigationShell;
   final Widget? child;
 
-  const HomePage({super.key, this.navigationShell, this.child})
+  const MainPage({super.key, this.navigationShell, this.child})
     : assert(navigationShell != null || child != null);
 
   @override
@@ -24,13 +24,17 @@ class HomePage extends ConsumerWidget {
       AuthStateAuthenticated() => Scaffold(
         body: navigationShell ?? child,
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: context.appColors.background,
+          selectedItemColor: context.appColors.primaryLink,
+          unselectedItemColor: context.appColors.greyText,
+          selectedLabelStyle: context.appTextStyles.label,
           type: BottomNavigationBarType.fixed,
           items:
               BottomNavigationItem.values
                   .map(
-                    (e) => BottomNavigationBarItem(
-                      icon: Icon(e.icon),
-                      label: e.title,
+                    (bottomNavItem) => BottomNavigationBarItem(
+                      icon: Icon(bottomNavItem.icon),
+                      label: bottomNavItem.title,
                     ),
                   )
                   .toList(),
@@ -40,7 +44,8 @@ class HomePage extends ConsumerWidget {
                   : BottomNavigationItem.getIndexForLocation(
                     ref.read(baseRouterProvider).currentLocationUri.path,
                   ),
-          onTap: (value) => _onItemTapped(ref: ref, index: value),
+          onTap:
+              (selectedIndex) => _onItemTapped(ref: ref, index: selectedIndex),
         ),
       ),
       _ => Scaffold(body: SizedBox()),
