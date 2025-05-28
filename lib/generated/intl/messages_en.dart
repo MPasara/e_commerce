@@ -29,6 +29,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
         "authSuccess":
             MessageLookupByLibrary.simpleMessage("Successfully authenticated"),
+        "bottomNavAccount": MessageLookupByLibrary.simpleMessage("Account"),
+        "bottomNavHome": MessageLookupByLibrary.simpleMessage("Home"),
+        "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Order"),
+        "bottomNavWishlist": MessageLookupByLibrary.simpleMessage("Wishlist"),
         "confirmPasswordHint":
             MessageLookupByLibrary.simpleMessage("Confirm password"),
         "confirmPasswordLabel":
@@ -67,6 +71,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register Account"),
         "requiredFieldError":
             MessageLookupByLibrary.simpleMessage("This field is required"),
+        "searchHint":
+            MessageLookupByLibrary.simpleMessage("Search for a product"),
         "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
         "signOutFailed": m0,
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),

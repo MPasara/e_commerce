@@ -7,17 +7,17 @@ import 'package:shopzy/features/dashboard/presentation/home_page.dart';
 import 'package:shopzy/features/notifications/presentation/all_notifications_page.dart';
 import 'package:shopzy/features/notifications/presentation/notification_details_page.dart';
 
-class NotificationsPage extends ConsumerWidget {
-  static const routeName = '/notifications';
+class OrderPage extends ConsumerWidget {
+  static const routeName = '/order';
 
-  const NotificationsPage({super.key});
+  const OrderPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: [
         Text(
-          'Notifications',
+          'Order',
           style: context.appTextStyles.boldLarge,
           textAlign: TextAlign.center,
         ),

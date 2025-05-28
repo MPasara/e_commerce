@@ -80,6 +80,16 @@ class S {
     );
   }
 
+  /// `Search for a product`
+  String get searchHint {
+    return Intl.message(
+      'Search for a product',
+      name: 'searchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password must be at least 6 characters`
   String get passwordValidationError {
     return Intl.message(
@@ -365,6 +375,46 @@ class S {
     return Intl.message(
       'Signed up successfully',
       name: 'sign_up_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get bottomNavHome {
+    return Intl.message(
+      'Home',
+      name: 'bottomNavHome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wishlist`
+  String get bottomNavWishlist {
+    return Intl.message(
+      'Wishlist',
+      name: 'bottomNavWishlist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order`
+  String get bottomNavOrder {
+    return Intl.message(
+      'Order',
+      name: 'bottomNavOrder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account`
+  String get bottomNavAccount {
+    return Intl.message(
+      'Account',
+      name: 'bottomNavAccount',
       desc: '',
       args: [],
     );

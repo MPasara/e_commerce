@@ -29,6 +29,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
         "authSuccess":
             MessageLookupByLibrary.simpleMessage("Uspješna autentikacija"),
+        "bottomNavAccount": MessageLookupByLibrary.simpleMessage("Račun"),
+        "bottomNavHome": MessageLookupByLibrary.simpleMessage("Početna"),
+        "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Narudžba"),
+        "bottomNavWishlist":
+            MessageLookupByLibrary.simpleMessage("Lista želja"),
         "confirmPasswordHint":
             MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
         "confirmPasswordLabel":
@@ -68,6 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Registracija računa"),
         "requiredFieldError":
             MessageLookupByLibrary.simpleMessage("Ovo polje je obavezno"),
+        "searchHint":
+            MessageLookupByLibrary.simpleMessage("Pretražite proizvod"),
         "signInButton": MessageLookupByLibrary.simpleMessage("Prijavi se"),
         "signOutFailed": m0,
         "signUp": MessageLookupByLibrary.simpleMessage("Registriraj se"),

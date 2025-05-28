@@ -2,20 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:shopzy/common/domain/router/navigation_extensions.dart';
 import 'package:shopzy/common/presentation/build_context_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
+import 'package:shopzy/features/auth/domain/notifiers/auth_notifier.dart';
 
-class DirectoriesPage extends ConsumerWidget {
-  static const routeName = '/directories';
+class AccountPage extends ConsumerWidget {
+  static const routeName = '/account';
   static String pathPattern(int level) => ':directoryName$level';
 
-  const DirectoriesPage({
-    super.key,
-    this.directoryName,
-    this.canGoDeeper = true,
-  });
+  const AccountPage({super.key, this.directoryName, this.canGoDeeper = true});
 
   final String? directoryName;
   final bool canGoDeeper;
@@ -32,7 +28,7 @@ class DirectoriesPage extends ConsumerWidget {
           spacing16,
         ],
         Text(
-          'Directories: $directoryName',
+          'Account: $directoryName',
           style: context.appTextStyles.boldLarge,
           textAlign: TextAlign.center,
         ),
@@ -51,6 +47,12 @@ class DirectoriesPage extends ConsumerWidget {
             ),
           ),
         ],
+        spacing16,
+        TextButton(
+          onPressed: ref.read(authNotifierProvider.notifier).logout,
+          child: Text('Logout', style: context.appTextStyles.regular),
+        ),
+        spacing16,
       ],
     );
   }

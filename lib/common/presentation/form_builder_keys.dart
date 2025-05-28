@@ -7,7 +7,8 @@ class FormBuilderKeys {
   // Authentication form fields
   static const email = 'email';
   static const password = 'password';
-  static const confirmPassword = 'confirm_password';
+  static const confirmPassword = 'confirmPassword';
+  static const search = 'search';
 
   // Private constructor to prevent instantiation
   const FormBuilderKeys._();
