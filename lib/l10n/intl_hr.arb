@@ -1,5 +1,6 @@
 {
     "@@locale": "hr",
+    "appName": "Shopzy",
     "emailHint": "primjer@email.com",
     "passwordHint": "Unesite lozinku računa",
     "confirmPasswordHint": "Potvrdite lozinku",
@@ -34,5 +35,6 @@
     "bottomNavHome": "Početna",
     "bottomNavWishlist": "Lista želja",
     "bottomNavOrder": "Narudžba",
-    "bottomNavAccount": "Račun"
+    "bottomNavAccount": "Račun",
+    "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka"
 } 

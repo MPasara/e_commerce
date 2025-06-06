@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Shopzy`
+  String get appName {
+    return Intl.message(
+      'Shopzy',
+      name: 'appName',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `example@email.com`
   String get emailHint {
     return Intl.message(
@@ -415,6 +425,16 @@ class S {
     return Intl.message(
       'Account',
       name: 'bottomNavAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error occurred while fetching products from database`
+  String get productFetchError {
+    return Intl.message(
+      'Error occurred while fetching products from database',
+      name: 'productFetchError',
       desc: '',
       args: [],
     );

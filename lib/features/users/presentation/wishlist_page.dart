@@ -15,7 +15,7 @@ class WishlistPage extends ConsumerWidget {
     return ListView(
       children: [
         Text(
-          'Wishlist',
+          'Wishlist'.toUpperCase(),
           style: context.appTextStyles.boldLarge,
           textAlign: TextAlign.center,
         ),
@@ -27,7 +27,7 @@ class WishlistPage extends ConsumerWidget {
                   UserDetailsPage.getRouteNameWithParams(1, optional: 'abc'),
                 ),
               ),
-          child: Text('Item 1', style: context.appTextStyles.bold),
+          child: Text('Item 1', style: context.appTextStyles.regular),
         ),
         spacing16,
         TextButton(
@@ -38,7 +38,7 @@ class WishlistPage extends ConsumerWidget {
                   keepExistingQueryString: false,
                 ),
               ),
-          child: Text('Item 2', style: context.appTextStyles.bold),
+          child: Text('Item 2', style: context.appTextStyles.regular),
         ),
         spacing16,
         TextButton(
@@ -46,7 +46,7 @@ class WishlistPage extends ConsumerWidget {
               () => ref.pushNamed(
                 '${WishlistPage.routeName}${UserDetailsPage.routeName.replaceAll(UserDetailsPage.pathPattern, 'R')}',
               ),
-          child: Text('Item R', style: context.appTextStyles.bold),
+          child: Text('Item R', style: context.appTextStyles.regular),
         ),
       ],
     );

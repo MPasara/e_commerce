@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "appName": MessageLookupByLibrary.simpleMessage("Shopzy"),
         "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
             "Could not find ID Token from generated credential."),
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
@@ -64,6 +65,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Password must be at least 6 characters"),
         "passwordsDoNotMatch":
             MessageLookupByLibrary.simpleMessage("Passwords do not match"),
+        "productFetchError": MessageLookupByLibrary.simpleMessage(
+            "Error occurred while fetching products from database"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Register"),
         "registerSubtitle": MessageLookupByLibrary.simpleMessage(
             "Enter Email and Password to register"),

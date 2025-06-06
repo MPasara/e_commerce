@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shopzy/common/constants/supabase_constants.dart';
 import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
+import 'package:shopzy/features/product/data/models/product_response.dart';
 import 'package:shopzy/generated/l10n.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,6 +29,8 @@ abstract interface class DatabaseService {
   Future<void> signInWithApple();
   Stream<AuthStateChange> onAuthStateChange();
   Future<void> logout();
+
+  Future<List<ProductResponse>> fetchProducts();
 }
 
 class DatabaseServiceImpl implements DatabaseService {
@@ -96,14 +100,9 @@ class DatabaseServiceImpl implements DatabaseService {
 
   @override
   Future<void> signInWithGoogle() async {
-    const webClientId =
-        '104131253486-d3hk2b26ij52q5fu310q73suuvhu23n3.apps.googleusercontent.com';
-
-    const iosClientId =
-        '104131253486-qel5fit1986bnlbqj22nfab0rcu32tum.apps.googleusercontent.com';
     final googleSignIn = GoogleSignIn(
-      clientId: iosClientId,
-      serverClientId: webClientId,
+      clientId: SupabaseConstants.googleIosClientId,
+      serverClientId: SupabaseConstants.googleWebClientId,
     );
     final googleUser = await googleSignIn.signIn();
     if (googleUser == null) {
@@ -139,6 +138,15 @@ class DatabaseServiceImpl implements DatabaseService {
     } catch (e) {
       throw AuthException(S.current.signOutFailed(e.toString()));
     }
+  }
+
+  @override
+  Future<List<ProductResponse>> fetchProducts() async {
+    final response =
+        await _client.from(SupabaseConstants.productTable).select();
+    final List<ProductResponse> products =
+        response.map((product) => ProductResponse.fromJson(product)).toList();
+    return products;
   }
 }
 

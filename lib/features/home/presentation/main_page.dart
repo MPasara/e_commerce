@@ -25,15 +25,16 @@ class MainPage extends ConsumerWidget {
         body: navigationShell ?? child,
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: context.appColors.background,
-          selectedItemColor: context.appColors.primaryLink,
-          unselectedItemColor: context.appColors.greyText,
+          selectedItemColor: context.appColors.secondary,
+          unselectedItemColor: Color(0xffDAA520),
+          showUnselectedLabels: false,
           selectedLabelStyle: context.appTextStyles.label,
           type: BottomNavigationBarType.fixed,
           items:
               BottomNavigationItem.values
                   .map(
                     (bottomNavItem) => BottomNavigationBarItem(
-                      icon: Icon(bottomNavItem.icon),
+                      icon: Icon(bottomNavItem.icon, size: 28),
                       label: bottomNavItem.title,
                     ),
                   )

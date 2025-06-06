@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "appName": MessageLookupByLibrary.simpleMessage("Shopzy"),
         "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
             "ID token nije pronađen iz generiranih vjerodajnica."),
         "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
@@ -65,6 +66,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Lozinka mora imati najmanje 6 znakova"),
         "passwordsDoNotMatch":
             MessageLookupByLibrary.simpleMessage("Lozinke se ne podudaraju"),
+        "productFetchError": MessageLookupByLibrary.simpleMessage(
+            "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka"),
         "registerButton":
             MessageLookupByLibrary.simpleMessage("Registriraj se"),
         "registerSubtitle": MessageLookupByLibrary.simpleMessage(

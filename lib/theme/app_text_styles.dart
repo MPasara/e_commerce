@@ -97,13 +97,14 @@ AppTextStyles getAppTextStyles({
 
   return AppTextStyles._(
     // Base styles
-    regular: baseTextStyle,
+    regular: baseTextStyle.copyWith(color: appColors.secondary),
     bold: baseTextStyle.copyWith(
       fontWeight: _AppTextStyleConstants.boldFontWeight,
     ),
     boldLarge: baseTextStyle.copyWith(
       fontWeight: _AppTextStyleConstants.boldFontWeight,
       fontSize: AppSizes.size30,
+      color: appColors.secondary,
     ),
 
     // Button style

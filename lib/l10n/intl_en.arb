@@ -1,5 +1,6 @@
 {
     "@@locale": "en",
+    "appName": "Shopzy",
     "emailHint": "example@email.com",
     "passwordHint": "Enter account password",
     "confirmPasswordHint": "Confirm password",
@@ -36,5 +37,6 @@
     "bottomNavHome": "Home",
     "bottomNavWishlist": "Wishlist",
     "bottomNavOrder": "Order",
-    "bottomNavAccount": "Account"
+    "bottomNavAccount": "Account",
+    "productFetchError": "Error occurred while fetching products from database"
 }
