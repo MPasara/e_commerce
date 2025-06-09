@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shopzy/common/domain/providers/base_router_provider.dart';
@@ -17,6 +18,25 @@ class MainPage extends ConsumerWidget {
   const MainPage({super.key, this.navigationShell, this.child})
     : assert(navigationShell != null || child != null);
 
+  int _getCurrentIndex(WidgetRef ref) {
+    if (navigationShell != null) {
+      return navigationShell!.currentIndex;
+    }
+    return BottomNavigationItem.getIndexForLocation(
+      ref.read(baseRouterProvider).currentLocationUri.path,
+    );
+  }
+
+  List<BottomNavigationBarItem> _buildNavigationItems() {
+    return BottomNavigationItem.values.map((item) {
+      return BottomNavigationBarItem(
+        icon: Icon(item.icon, size: 28),
+        activeIcon: Icon(item.selectedIcon, size: 28),
+        label: item.title,
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authNotifierProvider);
@@ -25,28 +45,17 @@ class MainPage extends ConsumerWidget {
         body: navigationShell ?? child,
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: context.appColors.background,
-          selectedItemColor: context.appColors.secondary,
-          unselectedItemColor: Color(0xffDAA520),
+          selectedItemColor: context.appColors.gold,
+          unselectedItemColor: context.appColors.secondary,
           showUnselectedLabels: false,
           selectedLabelStyle: context.appTextStyles.label,
           type: BottomNavigationBarType.fixed,
-          items:
-              BottomNavigationItem.values
-                  .map(
-                    (bottomNavItem) => BottomNavigationBarItem(
-                      icon: Icon(bottomNavItem.icon, size: 28),
-                      label: bottomNavItem.title,
-                    ),
-                  )
-                  .toList(),
-          currentIndex:
-              navigationShell != null
-                  ? navigationShell!.currentIndex
-                  : BottomNavigationItem.getIndexForLocation(
-                    ref.read(baseRouterProvider).currentLocationUri.path,
-                  ),
-          onTap:
-              (selectedIndex) => _onItemTapped(ref: ref, index: selectedIndex),
+          items: _buildNavigationItems(),
+          currentIndex: _getCurrentIndex(ref),
+          onTap: (selectedIndex) {
+            HapticFeedback.mediumImpact;
+            _onItemTapped(ref: ref, index: selectedIndex);
+          },
         ),
       ),
       _ => Scaffold(body: SizedBox()),

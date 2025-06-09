@@ -6,18 +6,36 @@ import 'package:shopzy/features/users/presentation/wishlist_page.dart';
 import 'package:shopzy/generated/l10n.dart';
 
 enum BottomNavigationItem {
-  home(icon: Icons.home_outlined, routeName: HomePage.routeName),
+  home(
+    icon: Icons.home_outlined,
+    selectedIcon: Icons.home,
+    routeName: HomePage.routeName,
+  ),
   wishlist(
     icon: Icons.favorite_outline_outlined,
+    selectedIcon: Icons.favorite,
     routeName: WishlistPage.routeName,
   ),
-  order(icon: Icons.shopping_bag_outlined, routeName: OrderPage.routeName),
-  account(icon: Icons.person_2_outlined, routeName: AccountPage.routeName);
+  order(
+    icon: Icons.shopping_bag_outlined,
+    selectedIcon: Icons.shopping_bag,
+    routeName: OrderPage.routeName,
+  ),
+  account(
+    icon: Icons.person_2_outlined,
+    selectedIcon: Icons.person_2,
+    routeName: AccountPage.routeName,
+  );
 
   final IconData icon;
+  final IconData selectedIcon;
   final String routeName;
 
-  const BottomNavigationItem({required this.icon, required this.routeName});
+  const BottomNavigationItem({
+    required this.icon,
+    required this.selectedIcon,
+    required this.routeName,
+  });
 
   String get title => switch (this) {
     home => S.current.bottomNavHome,

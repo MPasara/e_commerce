@@ -13,6 +13,8 @@ final class AppColors extends ThemeExtension<AppColors> {
   final Color? black;
   final Color? errorRed;
   final Color? successGreen;
+  final Color? scrollbarColor;
+  final Color? gold;
 
   const AppColors({
     required this.defaultColor,
@@ -27,6 +29,8 @@ final class AppColors extends ThemeExtension<AppColors> {
     required this.black,
     required this.errorRed,
     required this.successGreen,
+    required this.scrollbarColor,
+    required this.gold,
   });
 
   @override
@@ -43,6 +47,8 @@ final class AppColors extends ThemeExtension<AppColors> {
     Color? black,
     Color? errorRed,
     Color? successGreen,
+    Color? scrollbarColor,
+    Color? gold,
   }) => AppColors(
     defaultColor: defaultColor ?? this.defaultColor,
     secondary: secondary ?? this.secondary,
@@ -57,6 +63,8 @@ final class AppColors extends ThemeExtension<AppColors> {
     black: black ?? this.black,
     errorRed: errorRed ?? this.errorRed,
     successGreen: successGreen ?? this.successGreen,
+    scrollbarColor: scrollbarColor ?? this.scrollbarColor,
+    gold: gold ?? this.gold,
   );
 
   @override
@@ -83,6 +91,8 @@ final class AppColors extends ThemeExtension<AppColors> {
       black: Color.lerp(black, other.black, t),
       errorRed: Color.lerp(errorRed, other.errorRed, t),
       successGreen: Color.lerp(successGreen, other.successGreen, t),
+      scrollbarColor: Color.lerp(scrollbarColor, other.scrollbarColor, t),
+      gold: Color.lerp(gold, other.gold, t),
     );
   }
 }

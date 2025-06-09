@@ -39,7 +39,7 @@ class ProductCard extends StatelessWidget {
                     product.imageUrl != null
                         ? CachedNetworkImage(
                           imageUrl: product.imageUrl!,
-                          height: 140,
+                          height: 122,
                           width: double.infinity,
                           fit: BoxFit.cover,
                           placeholder:

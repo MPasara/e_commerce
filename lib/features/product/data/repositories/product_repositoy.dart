@@ -17,7 +17,7 @@ final productRepositoryProvider = Provider<ProductRepository>(
 );
 
 abstract interface class ProductRepository {
-  EitherFailureOr<List<Product>> getProducts();
+  EitherFailureOr<List<Product>> getProducts({int offset = 0, int limit = 10});
 }
 
 class ProductRepositoryImpl
@@ -29,9 +29,15 @@ class ProductRepositoryImpl
   const ProductRepositoryImpl(this._databaseService, this._productMapper);
 
   @override
-  EitherFailureOr<List<Product>> getProducts() => execute(
+  EitherFailureOr<List<Product>> getProducts({
+    int offset = 0,
+    int limit = 10,
+  }) => execute(
     () async {
-      final productReponseList = await _databaseService.fetchProducts();
+      final productReponseList = await _databaseService.fetchProducts(
+        offset: offset,
+        limit: limit,
+      );
       final products =
           productReponseList
               .map((productResponse) => _productMapper(productResponse))

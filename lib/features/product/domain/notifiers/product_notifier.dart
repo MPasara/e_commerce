@@ -10,6 +10,10 @@ final productNotifierProvider =
 
 class ProductNotifier extends Notifier<BaseState<List<Product>>> {
   late final ProductRepository _productRepository;
+  static const int _limit = 10;
+  int _currentOffset = 0;
+  bool _hasMore = true;
+  List<Product> _currentProducts = [];
 
   @override
   BaseState<List<Product>> build() {
@@ -18,12 +22,53 @@ class ProductNotifier extends Notifier<BaseState<List<Product>>> {
   }
 
   Future<void> getProducts() async {
+    _currentOffset = 0;
+    _hasMore = true;
+    _currentProducts = [];
     state = const BaseState.loading();
 
-    final eitherFailureOrProducts = await _productRepository.getProducts();
+    final eitherFailureOrProducts = await _productRepository.getProducts(
+      offset: _currentOffset,
+      limit: _limit,
+    );
+
     state = eitherFailureOrProducts.fold(
       (failure) => BaseState.error(failure),
-      (products) => BaseState.data(products),
+      (products) {
+        _currentProducts = products;
+        _hasMore = products.length == _limit;
+        return BaseState.data(_currentProducts);
+      },
     );
   }
+
+  Future<void> loadMore() async {
+    if (!_hasMore) return;
+
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    _currentOffset += _limit;
+    final eitherFailureOrProducts = await _productRepository.getProducts(
+      offset: _currentOffset,
+      limit: _limit,
+    );
+
+    eitherFailureOrProducts.fold(
+      (failure) {
+        _currentOffset -= _limit;
+        state = BaseState.error(failure);
+      },
+      (products) {
+        if (products.isEmpty) {
+          _hasMore = false;
+        } else {
+          _currentProducts = [..._currentProducts, ...products];
+          _hasMore = products.length == _limit;
+          state = BaseState.data(_currentProducts);
+        }
+      },
+    );
+  }
+
+  bool get hasMore => _hasMore;
 }
