@@ -30,7 +30,10 @@ abstract interface class DatabaseService {
   Stream<AuthStateChange> onAuthStateChange();
   Future<void> logout();
 
-  Future<List<ProductResponse>> fetchProducts({int offset = 0, int limit = 10});
+  Future<({List<ProductResponse> items, int totalCount})> fetchProducts({
+    int offset = 0,
+    int limit = 10,
+  });
 }
 
 class DatabaseServiceImpl implements DatabaseService {
@@ -141,19 +144,26 @@ class DatabaseServiceImpl implements DatabaseService {
   }
 
   @override
-  Future<List<ProductResponse>> fetchProducts({
+  Future<({List<ProductResponse> items, int totalCount})> fetchProducts({
     int offset = 0,
     int limit = 10,
   }) async {
-    final to = offset + limit - 1;
+    // Get total count
+    final countResponse =
+        await _client.from(SupabaseConstants.productTable).count();
+    final totalCount = countResponse ?? 0;
 
+    // Get items
+    final to = offset + limit - 1;
     final response = await _client
         .from(SupabaseConstants.productTable)
         .select()
         .range(offset, to);
+
     final List<ProductResponse> products =
         response.map((product) => ProductResponse.fromJson(product)).toList();
-    return products;
+
+    return (items: products, totalCount: totalCount);
   }
 }
 

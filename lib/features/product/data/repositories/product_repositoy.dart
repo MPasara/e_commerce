@@ -34,12 +34,12 @@ class ProductRepositoryImpl
     int limit = 10,
   }) => execute(
     () async {
-      final productReponseList = await _databaseService.fetchProducts(
+      final result = await _databaseService.fetchProducts(
         offset: offset,
         limit: limit,
       );
       final products =
-          productReponseList
+          result.items
               .map((productResponse) => _productMapper(productResponse))
               .toList();
 
