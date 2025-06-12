@@ -70,5 +70,6 @@ class ProductNotifier extends Notifier<BaseState<List<Product>>> {
     );
   }
 
+  // ignore: avoid_public_notifier_properties
   bool get hasMore => _hasMore;
 }

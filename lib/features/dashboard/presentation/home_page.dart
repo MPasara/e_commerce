@@ -39,7 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent &&
+            (_scrollController.position.maxScrollExtent * 0.7) &&
         !_isLoadingMore &&
         _hasMore) {
       _loadMore();
@@ -74,7 +74,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             style: context.appTextStyles.title,
           ),
           backgroundColor: context.appColors.background,
-          elevation: 0.2,
+          elevation: 0,
           actions: [
             Icon(
               Icons.notifications_outlined,
@@ -88,91 +88,73 @@ class _HomePageState extends ConsumerState<HomePage> {
             spacing20,
           ],
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await ref.read(productNotifierProvider.notifier).getProducts();
-          },
-          color: context.appColors.secondary,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  spacing16,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: ShopzyTextField.search(),
-                  ),
-                  spacing4,
-                  // Display products based on state
-                  switch (productsState) {
-                    BaseInitial() => const SizedBox.shrink(),
-                    BaseLoading() => Center(
-                      child: CircularProgressIndicator(
-                        color: context.appColors.secondary,
-                      ),
-                    ),
-                    BaseError(:final failure) => Center(
-                      child: Text(
-                        'Error: ${failure.error}',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                    BaseData(:final data) => SizedBox(
-                      height: MediaQuery.sizeOf(context).height - 200,
-                      child: RawScrollbar(
-                        padding: EdgeInsets.only(right: 2),
-                        interactive: true,
-                        thumbColor: context.appColors.scrollbarColor,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: GridView.builder(
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsets.only(
-                                  left: 16,
-                                  right: 16,
-                                  top: 20,
-                                  bottom: 20,
-                                ),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 0.75,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 20,
-                                    ),
-                                itemCount: data.length,
-                                itemBuilder: (context, index) {
-                                  final product = data[index];
-                                  return ProductCard(
-                                    product: product,
-                                    onTap: () {},
-                                  );
-                                },
-                              ),
-                            ),
-                            if (_hasMore)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
-                                child: CircularProgressIndicator(
-                                  color: context.appColors.secondary,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  },
-                ],
-              ),
+        body: switch (productsState) {
+          BaseInitial() => const SizedBox.shrink(),
+          BaseLoading() => Center(
+            child: CircularProgressIndicator(
+              color: context.appColors.secondary,
             ),
           ),
-        ),
+          BaseError(:final failure) => Center(
+            child: Text(
+              'Error: ${failure.error}',
+              style: TextStyle(color: context.appColors.errorRed),
+            ),
+          ),
+          BaseData(:final data) => Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 16, 25, 4),
+                child: ShopzyTextField.search(),
+              ),
+              Expanded(
+                child: RawScrollbar(
+                  padding: const EdgeInsets.only(right: 2),
+                  interactive: true,
+                  trackColor: Colors.red,
+                  thumbColor: context.appColors.scrollbarColor,
+                  controller: _scrollController,
+                  radius: const Radius.circular(8),
+                  thickness: 4,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await ref
+                          .read(productNotifierProvider.notifier)
+                          .getProducts();
+                    },
+                    color: context.appColors.black,
+                    backgroundColor: context.appColors.gold,
+                    child: GridView.builder(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.75,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 20,
+                          ),
+                      itemCount: data.length + (_hasMore ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == data.length) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 20),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        final product = data[index];
+                        return ProductCard(product: product, onTap: () {});
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        },
       ),
     );
   }
