@@ -24,66 +24,82 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "appName": MessageLookupByLibrary.simpleMessage("Shopzy"),
-        "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
-            "ID token nije pronađen iz generiranih vjerodajnica."),
-        "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
-        "authSuccess":
-            MessageLookupByLibrary.simpleMessage("Uspješna autentikacija"),
-        "bottomNavAccount": MessageLookupByLibrary.simpleMessage("Račun"),
-        "bottomNavHome": MessageLookupByLibrary.simpleMessage("Početna"),
-        "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Narudžba"),
-        "bottomNavWishlist":
-            MessageLookupByLibrary.simpleMessage("Lista želja"),
-        "confirmPasswordHint":
-            MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
-        "confirmPasswordLabel":
-            MessageLookupByLibrary.simpleMessage("Potvrdite lozinku"),
-        "emailHint": MessageLookupByLibrary.simpleMessage("primjer@email.com"),
-        "emailLabel": MessageLookupByLibrary.simpleMessage("E-pošta"),
-        "forgotPassword":
-            MessageLookupByLibrary.simpleMessage("Zaboravljena lozinka"),
-        "googleAccessTokenNotFound": MessageLookupByLibrary.simpleMessage(
-            "Token za pristup nije pronađen."),
-        "googleIdTokenNotFound":
-            MessageLookupByLibrary.simpleMessage("ID token nije pronađen."),
-        "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
-        "googleSignInCancelled": MessageLookupByLibrary.simpleMessage(
-            "Google prijava je otkazana od strane korisnika."),
-        "loginFailed": MessageLookupByLibrary.simpleMessage(
-            "Prijava nije uspjela: Sesija nije kreirana"),
-        "loginSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Molimo unesite svoje podatke za prijavu"),
-        "loginWelcomeTitle":
-            MessageLookupByLibrary.simpleMessage("Dobrodošli natrag u Shopzy"),
-        "logoutSuccess":
-            MessageLookupByLibrary.simpleMessage("Uspješna odjava"),
-        "orDivider": MessageLookupByLibrary.simpleMessage("ILI"),
-        "passwordHint":
-            MessageLookupByLibrary.simpleMessage("Unesite lozinku računa"),
-        "passwordLabel": MessageLookupByLibrary.simpleMessage("Lozinka"),
-        "passwordValidationError": MessageLookupByLibrary.simpleMessage(
-            "Lozinka mora imati najmanje 6 znakova"),
-        "passwordsDoNotMatch":
-            MessageLookupByLibrary.simpleMessage("Lozinke se ne podudaraju"),
-        "productFetchError": MessageLookupByLibrary.simpleMessage(
-            "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka"),
-        "registerButton":
-            MessageLookupByLibrary.simpleMessage("Registriraj se"),
-        "registerSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Unesite e-poštu i lozinku za registraciju"),
-        "registerTitle":
-            MessageLookupByLibrary.simpleMessage("Registracija računa"),
-        "requiredFieldError":
-            MessageLookupByLibrary.simpleMessage("Ovo polje je obavezno"),
-        "searchHint":
-            MessageLookupByLibrary.simpleMessage("Pretražite proizvod"),
-        "signInButton": MessageLookupByLibrary.simpleMessage("Prijavi se"),
-        "signOutFailed": m0,
-        "signUp": MessageLookupByLibrary.simpleMessage("Registriraj se"),
-        "signUpFailed": MessageLookupByLibrary.simpleMessage(
-            "Registracija nije uspjela: Sesija nije kreirana"),
-        "socialSignInFailed": MessageLookupByLibrary.simpleMessage(
-            "Društvena prijava nije uspjela")
-      };
+    "appName": MessageLookupByLibrary.simpleMessage("Shopzy"),
+    "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
+      "ID token nije pronađen iz generiranih vjerodajnica.",
+    ),
+    "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
+    "authSuccess": MessageLookupByLibrary.simpleMessage(
+      "Uspješna autentikacija",
+    ),
+    "bottomNavAccount": MessageLookupByLibrary.simpleMessage("Račun"),
+    "bottomNavHome": MessageLookupByLibrary.simpleMessage("Početna"),
+    "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Narudžba"),
+    "bottomNavWishlist": MessageLookupByLibrary.simpleMessage("Lista želja"),
+    "confirmPasswordHint": MessageLookupByLibrary.simpleMessage(
+      "Potvrdite lozinku",
+    ),
+    "confirmPasswordLabel": MessageLookupByLibrary.simpleMessage(
+      "Potvrdite lozinku",
+    ),
+    "emailHint": MessageLookupByLibrary.simpleMessage("primjer@email.com"),
+    "emailLabel": MessageLookupByLibrary.simpleMessage("E-pošta"),
+    "forgotPassword": MessageLookupByLibrary.simpleMessage(
+      "Zaboravljena lozinka",
+    ),
+    "googleAccessTokenNotFound": MessageLookupByLibrary.simpleMessage(
+      "Token za pristup nije pronađen.",
+    ),
+    "googleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
+      "ID token nije pronađen.",
+    ),
+    "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
+    "googleSignInCancelled": MessageLookupByLibrary.simpleMessage(
+      "Google prijava je otkazana od strane korisnika.",
+    ),
+    "loginFailed": MessageLookupByLibrary.simpleMessage(
+      "Prijava nije uspjela: Sesija nije kreirana",
+    ),
+    "loginSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Molimo unesite svoje podatke za prijavu",
+    ),
+    "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage(
+      "Dobrodošli natrag u Shopzy",
+    ),
+    "logoutSuccess": MessageLookupByLibrary.simpleMessage("Uspješna odjava"),
+    "orDivider": MessageLookupByLibrary.simpleMessage("ILI"),
+    "passwordHint": MessageLookupByLibrary.simpleMessage(
+      "Unesite lozinku računa",
+    ),
+    "passwordLabel": MessageLookupByLibrary.simpleMessage("Lozinka"),
+    "passwordValidationError": MessageLookupByLibrary.simpleMessage(
+      "Lozinka mora imati najmanje 6 znakova",
+    ),
+    "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+      "Lozinke se ne podudaraju",
+    ),
+    "productFetchError": MessageLookupByLibrary.simpleMessage(
+      "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka",
+    ),
+    "registerButton": MessageLookupByLibrary.simpleMessage("Registriraj se"),
+    "registerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Unesite e-poštu i lozinku za registraciju",
+    ),
+    "registerTitle": MessageLookupByLibrary.simpleMessage(
+      "Registracija računa",
+    ),
+    "requiredFieldError": MessageLookupByLibrary.simpleMessage(
+      "Ovo polje je obavezno",
+    ),
+    "searchHint": MessageLookupByLibrary.simpleMessage("Pretražite proizvod"),
+    "signInButton": MessageLookupByLibrary.simpleMessage("Prijavi se"),
+    "signOutFailed": m0,
+    "signUp": MessageLookupByLibrary.simpleMessage("Registriraj se"),
+    "signUpFailed": MessageLookupByLibrary.simpleMessage(
+      "Registracija nije uspjela: Sesija nije kreirana",
+    ),
+    "socialSignInFailed": MessageLookupByLibrary.simpleMessage(
+      "Društvena prijava nije uspjela",
+    ),
+  };
 }

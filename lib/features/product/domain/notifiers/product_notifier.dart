@@ -44,7 +44,6 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
   Future<void> loadMore() async {
     if (!_hasMore || state is BaseLoading) return;
 
-    state = const BaseState.loading();
     _currentOffset += _limit;
 
     final eitherFailureOrProducts = await _productRepository.getProducts(
