@@ -1,29 +1,27 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:shopzy/common/domain/router/go_router_state_extensions.dart';
+import 'package:shopzy/common/domain/utils/string_extensions.dart';
 import 'package:shopzy/example/example_routes.dart';
-import 'package:shopzy/features/dashboard/presentation/dashboard_page.dart';
-import 'package:shopzy/features/directories/presentation/directories_page.dart';
-import 'package:shopzy/features/home/presentation/home_page.dart';
+import 'package:shopzy/features/dashboard/presentation/home_page.dart';
+import 'package:shopzy/features/directories/presentation/account_page.dart';
+import 'package:shopzy/features/home/presentation/main_page.dart';
 import 'package:shopzy/features/login/presentation/login_page.dart';
 import 'package:shopzy/features/notifications/presentation/all_notifications_page.dart';
 import 'package:shopzy/features/notifications/presentation/notification_details_page.dart';
-import 'package:shopzy/features/notifications/presentation/notifications_page.dart';
+import 'package:shopzy/features/notifications/presentation/order_page.dart';
 import 'package:shopzy/features/register/presentation/register_page.dart';
 import 'package:shopzy/features/reset_password/presentation/reset_password_page.dart';
 import 'package:shopzy/features/users/presentation/user_details_page.dart';
-import 'package:shopzy/features/users/presentation/users_page.dart';
-import 'package:shopzy/common/domain/utils/string_extensions.dart';
-import 'package:shopzy/common/domain/router/go_router_state_extensions.dart';
+import 'package:shopzy/features/users/presentation/wishlist_page.dart';
 
 List<RouteBase> getRoutes({
   required GlobalKey<NavigatorState> rootNavigatorKey,
   bool stateful = true,
 }) => [
   GoRoute(
-    path: HomePage.routeName,
-    redirect: (context, state) => DashboardPage.routeName,
+    path: MainPage.routeName,
+    redirect: (context, state) => HomePage.routeName,
   ),
   if (stateful)
     _statefulShellRoute(rootNavigatorKey: rootNavigatorKey)
@@ -50,13 +48,13 @@ RouteBase _statefulShellRoute({
 }) => StatefulShellRoute.indexedStack(
   builder:
       (context, state, navigationShell) =>
-          HomePage(navigationShell: navigationShell),
+          MainPage(navigationShell: navigationShell),
   branches: [
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: DashboardPage.routeName,
-          builder: (context, state) => DashboardPage(),
+          path: HomePage.routeName,
+          builder: (context, state) => HomePage(),
           routes: [
             GoRoute(
               path: UserDetailsPage.routeName.removeLeadingSlash,
@@ -71,7 +69,7 @@ RouteBase _statefulShellRoute({
                   (context, state) => state.redirectIfPathParameterValid<int>(
                     pathParameterName:
                         UserDetailsPage.pathPattern.removeLeadingColon,
-                    redirectTo: DashboardPage.routeName,
+                    redirectTo: HomePage.routeName,
                   ),
             ),
             getExampleRoutes(rootNavigatorKey: rootNavigatorKey),
@@ -82,8 +80,8 @@ RouteBase _statefulShellRoute({
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: UsersPage.routeName,
-          builder: (context, state) => UsersPage(),
+          path: WishlistPage.routeName,
+          builder: (context, state) => WishlistPage(),
           routes: [
             GoRoute(
               path: UserDetailsPage.routeName.removeLeadingSlash,
@@ -98,7 +96,7 @@ RouteBase _statefulShellRoute({
                   (context, state) => state.redirectIfPathParameterValid<int>(
                     pathParameterName:
                         UserDetailsPage.pathPattern.removeLeadingColon,
-                    redirectTo: UsersPage.routeName,
+                    redirectTo: WishlistPage.routeName,
                   ),
             ),
           ],
@@ -108,8 +106,8 @@ RouteBase _statefulShellRoute({
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: NotificationsPage.routeName,
-          builder: (context, state) => NotificationsPage(),
+          path: OrderPage.routeName,
+          builder: (context, state) => OrderPage(),
           routes: [
             GoRoute(
               path: AllNotificationsPage.routeName.removeLeadingSlash,
@@ -137,7 +135,7 @@ RouteBase _statefulShellRoute({
                                 .pathPattern
                                 .removeLeadingColon,
                         redirectTo:
-                            '${NotificationsPage.routeName}${AllNotificationsPage.routeName}',
+                            '${OrderPage.routeName}${AllNotificationsPage.routeName}',
                       ),
                 ),
               ],
@@ -158,7 +156,7 @@ RouteBase _statefulShellRoute({
                   (context, state) => state.redirectIfPathParameterValid<int>(
                     pathParameterName:
                         NotificationDetailsPage.pathPattern.removeLeadingColon,
-                    redirectTo: NotificationsPage.routeName,
+                    redirectTo: OrderPage.routeName,
                   ),
             ),
           ],
@@ -168,16 +166,16 @@ RouteBase _statefulShellRoute({
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: DirectoriesPage.routeName,
-          builder: (context, state) => DirectoriesPage(),
+          path: AccountPage.routeName,
+          builder: (context, state) => AccountPage(),
           routes: [
             _buildRoutesRecursively(
               depth: 10,
-              pathCallback: (depth) => DirectoriesPage.pathPattern(depth),
+              pathCallback: (depth) => AccountPage.pathPattern(depth),
               builderCallback:
-                  (context, state, depth) => DirectoriesPage(
+                  (context, state, depth) => AccountPage(
                     directoryName:
-                        state.pathParameters[DirectoriesPage.pathPattern(
+                        state.pathParameters[AccountPage.pathPattern(
                           depth,
                         ).removeLeadingColon],
                     canGoDeeper: depth > 1,
@@ -193,11 +191,11 @@ RouteBase _statefulShellRoute({
 RouteBase _shellRoute({
   required GlobalKey<NavigatorState> rootNavigatorKey,
 }) => ShellRoute(
-  builder: (context, state, child) => HomePage(child: child),
+  builder: (context, state, child) => MainPage(child: child),
   routes: [
     GoRoute(
-      path: DashboardPage.routeName,
-      builder: (context, state) => DashboardPage(),
+      path: HomePage.routeName,
+      builder: (context, state) => HomePage(),
       routes: [
         GoRoute(
           path: UserDetailsPage.routeName.removeLeadingSlash,
@@ -212,14 +210,14 @@ RouteBase _shellRoute({
               (context, state) => state.redirectIfPathParameterValid<int>(
                 pathParameterName:
                     UserDetailsPage.pathPattern.removeLeadingColon,
-                redirectTo: DashboardPage.routeName,
+                redirectTo: HomePage.routeName,
               ),
         ),
       ],
     ),
     GoRoute(
-      path: UsersPage.routeName,
-      builder: (context, state) => UsersPage(),
+      path: WishlistPage.routeName,
+      builder: (context, state) => WishlistPage(),
       routes: [
         GoRoute(
           path: UserDetailsPage.routeName.removeLeadingSlash,
@@ -234,14 +232,14 @@ RouteBase _shellRoute({
               (context, state) => state.redirectIfPathParameterValid<int>(
                 pathParameterName:
                     UserDetailsPage.pathPattern.removeLeadingColon,
-                redirectTo: UsersPage.routeName,
+                redirectTo: WishlistPage.routeName,
               ),
         ),
       ],
     ),
     GoRoute(
-      path: NotificationsPage.routeName,
-      builder: (context, state) => NotificationsPage(),
+      path: OrderPage.routeName,
+      builder: (context, state) => OrderPage(),
       routes: [
         GoRoute(
           path: AllNotificationsPage.routeName.removeLeadingSlash,
@@ -264,7 +262,7 @@ RouteBase _shellRoute({
                     pathParameterName:
                         NotificationDetailsPage.pathPattern.removeLeadingColon,
                     redirectTo:
-                        '${NotificationsPage.routeName}${AllNotificationsPage.routeName}',
+                        '${OrderPage.routeName}${AllNotificationsPage.routeName}',
                   ),
             ),
           ],
@@ -285,22 +283,22 @@ RouteBase _shellRoute({
               (context, state) => state.redirectIfPathParameterValid<int>(
                 pathParameterName:
                     NotificationDetailsPage.pathPattern.removeLeadingColon,
-                redirectTo: NotificationsPage.routeName,
+                redirectTo: OrderPage.routeName,
               ),
         ),
       ],
     ),
     GoRoute(
-      path: DirectoriesPage.routeName,
-      builder: (context, state) => DirectoriesPage(),
+      path: AccountPage.routeName,
+      builder: (context, state) => AccountPage(),
       routes: [
         _buildRoutesRecursively(
           depth: 10,
-          pathCallback: (depth) => DirectoriesPage.pathPattern(depth),
+          pathCallback: (depth) => AccountPage.pathPattern(depth),
           builderCallback:
-              (context, state, depth) => DirectoriesPage(
+              (context, state, depth) => AccountPage(
                 directoryName:
-                    state.pathParameters[DirectoriesPage.pathPattern(
+                    state.pathParameters[AccountPage.pathPattern(
                       depth,
                     ).removeLeadingColon],
                 canGoDeeper: depth > 1,

@@ -1,8 +1,10 @@
 {
     "@@locale": "hr",
+    "appName": "Shopzy",
     "emailHint": "primjer@email.com",
     "passwordHint": "Unesite lozinku računa",
     "confirmPasswordHint": "Potvrdite lozinku",
+    "searchHint": "Pretražite proizvod",
     "passwordValidationError": "Lozinka mora imati najmanje 6 znakova",
     "loginWelcomeTitle": "Dobrodošli natrag u Shopzy",
     "loginSubtitle": "Molimo unesite svoje podatke za prijavu",
@@ -29,5 +31,10 @@
     "googleIdTokenNotFound": "ID token nije pronađen.",
     "signOutFailed": "Odjava nije uspjela: {error}",
     "authSuccess": "Uspješna autentikacija",
-    "logoutSuccess": "Uspješna odjava"
+    "logoutSuccess": "Uspješna odjava",
+    "bottomNavHome": "Početna",
+    "bottomNavWishlist": "Lista želja",
+    "bottomNavOrder": "Narudžba",
+    "bottomNavAccount": "Račun",
+    "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka"
 } 

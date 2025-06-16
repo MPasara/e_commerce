@@ -24,59 +24,84 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
-            "Could not find ID Token from generated credential."),
-        "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
-        "authSuccess":
-            MessageLookupByLibrary.simpleMessage("Successfully authenticated"),
-        "confirmPasswordHint":
-            MessageLookupByLibrary.simpleMessage("Confirm password"),
-        "confirmPasswordLabel":
-            MessageLookupByLibrary.simpleMessage("Confirm Password"),
-        "emailHint": MessageLookupByLibrary.simpleMessage("example@email.com"),
-        "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
-        "forgotPassword":
-            MessageLookupByLibrary.simpleMessage("Forgot Password"),
-        "googleAccessTokenNotFound":
-            MessageLookupByLibrary.simpleMessage("No Access Token found."),
-        "googleIdTokenNotFound":
-            MessageLookupByLibrary.simpleMessage("No ID Token found."),
-        "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
-        "googleSignInCancelled": MessageLookupByLibrary.simpleMessage(
-            "Google sign in was cancelled by the user."),
-        "loginFailed": MessageLookupByLibrary.simpleMessage(
-            "Login failed: No session created"),
-        "loginSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Please enter your login details"),
-        "loginWelcomeTitle":
-            MessageLookupByLibrary.simpleMessage("Welcome back to Shopzy"),
-        "logoutSuccess":
-            MessageLookupByLibrary.simpleMessage("Successfully logged out"),
-        "orDivider": MessageLookupByLibrary.simpleMessage("OR"),
-        "passwordHint":
-            MessageLookupByLibrary.simpleMessage("Enter account password"),
-        "passwordLabel": MessageLookupByLibrary.simpleMessage("Password"),
-        "passwordValidationError": MessageLookupByLibrary.simpleMessage(
-            "Password must be at least 6 characters"),
-        "passwordsDoNotMatch":
-            MessageLookupByLibrary.simpleMessage("Passwords do not match"),
-        "registerButton": MessageLookupByLibrary.simpleMessage("Register"),
-        "registerSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Enter Email and Password to register"),
-        "registerTitle":
-            MessageLookupByLibrary.simpleMessage("Register Account"),
-        "requiredFieldError":
-            MessageLookupByLibrary.simpleMessage("This field is required"),
-        "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
-        "signOutFailed": m0,
-        "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
-        "signUpFailed": MessageLookupByLibrary.simpleMessage(
-            "Sign up failed: No session created"),
-        "sign_up_failed":
-            MessageLookupByLibrary.simpleMessage("Sign up failed"),
-        "sign_up_success":
-            MessageLookupByLibrary.simpleMessage("Signed up successfully"),
-        "socialSignInFailed":
-            MessageLookupByLibrary.simpleMessage("Social sign-in failed")
-      };
+    "appName": MessageLookupByLibrary.simpleMessage("Shopzy"),
+    "appleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
+      "Could not find ID Token from generated credential.",
+    ),
+    "appleSignIn": MessageLookupByLibrary.simpleMessage("Apple"),
+    "authSuccess": MessageLookupByLibrary.simpleMessage(
+      "Successfully authenticated",
+    ),
+    "bottomNavAccount": MessageLookupByLibrary.simpleMessage("Account"),
+    "bottomNavHome": MessageLookupByLibrary.simpleMessage("Home"),
+    "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Order"),
+    "bottomNavWishlist": MessageLookupByLibrary.simpleMessage("Wishlist"),
+    "confirmPasswordHint": MessageLookupByLibrary.simpleMessage(
+      "Confirm password",
+    ),
+    "confirmPasswordLabel": MessageLookupByLibrary.simpleMessage(
+      "Confirm Password",
+    ),
+    "emailHint": MessageLookupByLibrary.simpleMessage("example@email.com"),
+    "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
+    "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot Password"),
+    "googleAccessTokenNotFound": MessageLookupByLibrary.simpleMessage(
+      "No Access Token found.",
+    ),
+    "googleIdTokenNotFound": MessageLookupByLibrary.simpleMessage(
+      "No ID Token found.",
+    ),
+    "googleSignIn": MessageLookupByLibrary.simpleMessage("Google"),
+    "googleSignInCancelled": MessageLookupByLibrary.simpleMessage(
+      "Google sign in was cancelled by the user.",
+    ),
+    "loginFailed": MessageLookupByLibrary.simpleMessage(
+      "Login failed: No session created",
+    ),
+    "loginSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Please enter your login details",
+    ),
+    "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage(
+      "Welcome back to Shopzy",
+    ),
+    "logoutSuccess": MessageLookupByLibrary.simpleMessage(
+      "Successfully logged out",
+    ),
+    "orDivider": MessageLookupByLibrary.simpleMessage("OR"),
+    "passwordHint": MessageLookupByLibrary.simpleMessage(
+      "Enter account password",
+    ),
+    "passwordLabel": MessageLookupByLibrary.simpleMessage("Password"),
+    "passwordValidationError": MessageLookupByLibrary.simpleMessage(
+      "Password must be at least 6 characters",
+    ),
+    "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+      "Passwords do not match",
+    ),
+    "productFetchError": MessageLookupByLibrary.simpleMessage(
+      "Error occurred while fetching products from database",
+    ),
+    "registerButton": MessageLookupByLibrary.simpleMessage("Register"),
+    "registerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Enter Email and Password to register",
+    ),
+    "registerTitle": MessageLookupByLibrary.simpleMessage("Register Account"),
+    "requiredFieldError": MessageLookupByLibrary.simpleMessage(
+      "This field is required",
+    ),
+    "searchHint": MessageLookupByLibrary.simpleMessage("Search for a product"),
+    "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
+    "signOutFailed": m0,
+    "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
+    "signUpFailed": MessageLookupByLibrary.simpleMessage(
+      "Sign up failed: No session created",
+    ),
+    "sign_up_failed": MessageLookupByLibrary.simpleMessage("Sign up failed"),
+    "sign_up_success": MessageLookupByLibrary.simpleMessage(
+      "Signed up successfully",
+    ),
+    "socialSignInFailed": MessageLookupByLibrary.simpleMessage(
+      "Social sign-in failed",
+    ),
+  };
 }

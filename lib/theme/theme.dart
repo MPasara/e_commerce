@@ -17,6 +17,8 @@ final primaryTheme = _getTheme(
     black: Colors.black,
     errorRed: Colors.redAccent,
     successGreen: Colors.greenAccent,
+    scrollbarColor: Colors.black.withValues(alpha: 0.7),
+    gold: Color(0xffDAA520),
   ),
 );
 
@@ -35,6 +37,8 @@ final secondaryTheme = _getTheme(
     black: Colors.black,
     errorRed: Colors.redAccent,
     successGreen: Colors.greenAccent,
+    scrollbarColor: Colors.white.withValues(alpha: 0.7),
+    gold: Color(0xffDAA520),
   ),
 );
 
@@ -46,6 +50,12 @@ ThemeData _getTheme({required AppColors appColors}) {
       secondary: appColors.secondary,
     ),
     scaffoldBackgroundColor: appColors.background,
+    scrollbarTheme: ScrollbarThemeData(
+      thumbColor: WidgetStateProperty.all(appColors.scrollbarColor),
+      trackColor: WidgetStateProperty.all(Colors.transparent),
+      thickness: WidgetStateProperty.all(3),
+      radius: const Radius.circular(40),
+    ),
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: appColors.secondary,
       selectionColor: appColors.secondary?.withAlpha(51),

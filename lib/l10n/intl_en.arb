@@ -1,8 +1,10 @@
 {
     "@@locale": "en",
+    "appName": "Shopzy",
     "emailHint": "example@email.com",
     "passwordHint": "Enter account password",
     "confirmPasswordHint": "Confirm password",
+    "searchHint": "Search for a product",
     "passwordValidationError": "Password must be at least 6 characters",
     "loginWelcomeTitle": "Welcome back to Shopzy",
     "loginSubtitle": "Please enter your login details",
@@ -31,5 +33,10 @@
     "authSuccess": "Successfully authenticated",
     "logoutSuccess": "Successfully logged out",
     "sign_up_failed": "Sign up failed",
-    "sign_up_success": "Signed up successfully"
+    "sign_up_success": "Signed up successfully",
+    "bottomNavHome": "Home",
+    "bottomNavWishlist": "Wishlist",
+    "bottomNavOrder": "Order",
+    "bottomNavAccount": "Account",
+    "productFetchError": "Error occurred while fetching products from database"
 }

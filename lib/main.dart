@@ -75,12 +75,6 @@ class _RootAppWidgetState extends ConsumerState<RootAppWidget> {
       routerDelegate: baseRouter.routerDelegate,
       routeInformationParser: baseRouter.routeInformationParser,
       routeInformationProvider: baseRouter.routeInformationProvider,
-      /*  builder: (context, child) {
-        return Material(
-          type: MaterialType.transparency,
-          child: AppBaseWidget(child ?? const SizedBox()),
-        );
-      }, */
       builder:
           (context, child) => Material(
             type: MaterialType.transparency,

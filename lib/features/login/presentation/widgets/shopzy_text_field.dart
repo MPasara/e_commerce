@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -14,6 +16,8 @@ class ShopzyTextField extends StatefulWidget {
     this.keyboardType,
     this.showPasswordToggle = false,
     this.formState,
+    this.onChanged,
+    this.suffixIcon,
   });
 
   final String textFieldName;
@@ -23,6 +27,17 @@ class ShopzyTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool showPasswordToggle;
   final FormBuilderState? formState;
+  final void Function(String?)? onChanged;
+  final Widget? suffixIcon;
+
+  factory ShopzyTextField.search() {
+    return ShopzyTextField._(
+      textFieldName: FormBuilderKeys.search,
+      hintText: S.current.searchHint,
+      keyboardType: TextInputType.text,
+      onChanged: (value) {},
+    );
+  }
 
   factory ShopzyTextField.email() {
     return ShopzyTextField._(
@@ -68,21 +83,49 @@ class ShopzyTextField extends StatefulWidget {
 
 class _ShopzyTextFieldState extends State<ShopzyTextField> {
   late bool _obscureText;
+  final TextEditingController _controller = TextEditingController();
+  bool _showClearButton = false;
 
   @override
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
+    _controller.addListener(_onTextChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onTextChanged);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged() {
+    final showClearButton = _controller.text.isNotEmpty;
+    if (showClearButton != _showClearButton) {
+      setState(() {
+        _showClearButton = showClearButton;
+      });
+    }
+  }
+
+  void _clearText() {
+    _controller.clear();
+    if (widget.formState != null) {
+      widget.formState!.fields[widget.textFieldName]?.didChange(null);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
       name: widget.textFieldName,
+      controller: _controller,
       obscureText: _obscureText,
       keyboardType: widget.keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: widget.fieldValidator,
+      onChanged: widget.onChanged,
       style: context.appTextStyles.regular?.copyWith(
         color: context.appColors.secondary,
       ),
@@ -126,7 +169,13 @@ class _ShopzyTextFieldState extends State<ShopzyTextField> {
                     });
                   },
                 )
-                : null,
+                : IconButton(
+                  icon: Icon(
+                    _showClearButton ? Icons.close : Icons.search,
+                    color: context.appColors.greyText,
+                  ),
+                  onPressed: _showClearButton ? _clearText : null,
+                ),
       ),
     );
   }
