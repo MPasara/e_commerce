@@ -45,7 +45,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final productsState = ref.watch(productNotifierProvider);
-    final isLoadingMore = productsState is BaseLoading;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -118,9 +117,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 20,
                           ),
-                      itemCount: data.length + (isLoadingMore ? 1 : 0),
+                      itemCount: data.products.length + (data.hasMore ? 1 : 0),
                       itemBuilder: (context, index) {
-                        if (index == data.length) {
+                        if (index == data.products.length) {
                           return const Center(
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 20),
@@ -128,7 +127,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           );
                         }
-                        final product = data[index];
+                        final product = data.products[index];
                         return ProductCard(product: product, onTap: () {});
                       },
                     ),

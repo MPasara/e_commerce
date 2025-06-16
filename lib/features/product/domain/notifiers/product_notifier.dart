@@ -1,19 +1,16 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/base_notifier.dart';
 import 'package:shopzy/features/product/data/repositories/product_repositoy.dart';
-import 'package:shopzy/features/product/domain/entities/product.dart';
+import 'package:shopzy/features/product/domain/notifiers/product_state.dart';
 
 final productNotifierProvider =
-    NotifierProvider<ProductNotifier, BaseState<List<Product>>>(() {
+    NotifierProvider<ProductNotifier, BaseState<ProductState>>(() {
       return ProductNotifier();
     }, name: 'Product Notifier Provider');
 
-class ProductNotifier extends BaseNotifier<List<Product>> {
+class ProductNotifier extends BaseNotifier<ProductState> {
   late final ProductRepository _productRepository;
   static const int _limit = 10;
-  int _currentOffset = 0;
-  bool _hasMore = true;
-  List<Product> _currentProducts = [];
 
   @override
   void prepareForBuild() {
@@ -21,49 +18,57 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
   }
 
   Future<void> getProducts() async {
-    _currentOffset = 0;
-    _hasMore = true;
-    _currentProducts = [];
     state = const BaseState.loading();
 
     final eitherFailureOrProducts = await _productRepository.getProducts(
-      offset: _currentOffset,
+      offset: 0,
+      limit: _limit,
+    );
+
+    state = eitherFailureOrProducts.fold(
+      (failure) => BaseState.error(failure),
+      (products) => BaseState.data(
+        ProductState(
+          products: products,
+          offset: _limit,
+          hasMore: products.length == _limit,
+        ),
+      ),
+    );
+  }
+
+  Future<void> loadMore() async {
+    final currentState = state;
+    if (currentState is! BaseData<ProductState> ||
+        !currentState.data.hasMore ||
+        currentState.data.isLoadingMore) {
+      return;
+    }
+
+    state = BaseState.data(currentState.data.copyWith(isLoadingMore: true));
+
+    final eitherFailureOrProducts = await _productRepository.getProducts(
+      offset: currentState.data.offset,
       limit: _limit,
     );
 
     state = eitherFailureOrProducts.fold(
       (failure) => BaseState.error(failure),
       (products) {
-        _currentProducts = products;
-        _hasMore = products.length == _limit;
-        return BaseState.data(_currentProducts);
-      },
-    );
-  }
-
-  Future<void> loadMore() async {
-    if (!_hasMore || state is BaseLoading) return;
-
-    _currentOffset += _limit;
-
-    final eitherFailureOrProducts = await _productRepository.getProducts(
-      offset: _currentOffset,
-      limit: _limit,
-    );
-
-    eitherFailureOrProducts.fold(
-      (failure) {
-        _currentOffset -= _limit;
-        state = BaseState.error(failure);
-      },
-      (products) {
         if (products.isEmpty) {
-          _hasMore = false;
-          state = BaseState.data(_currentProducts);
+          return BaseState.data(
+            currentState.data.copyWith(hasMore: false, isLoadingMore: false),
+          );
         } else {
-          _currentProducts = [..._currentProducts, ...products];
-          _hasMore = products.length == _limit;
-          state = BaseState.data(_currentProducts);
+          final newProducts = [...currentState.data.products, ...products];
+          return BaseState.data(
+            currentState.data.copyWith(
+              products: newProducts,
+              offset: currentState.data.offset + _limit,
+              hasMore: products.length == _limit,
+              isLoadingMore: false,
+            ),
+          );
         }
       },
     );
