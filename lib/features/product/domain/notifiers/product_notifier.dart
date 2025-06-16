@@ -53,7 +53,10 @@ class ProductNotifier extends BaseNotifier<ProductState> {
     );
 
     state = eitherFailureOrProducts.fold(
-      (failure) => BaseState.error(failure),
+      (failure) {
+        setGlobalFailure(failure);
+        return BaseState.data(currentState.data.copyWith(isLoadingMore: false));
+      },
       (products) {
         if (products.isEmpty) {
           return BaseState.data(

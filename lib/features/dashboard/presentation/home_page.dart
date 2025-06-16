@@ -93,7 +93,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: RawScrollbar(
                   padding: const EdgeInsets.only(right: 2),
                   interactive: true,
-                  trackColor: Colors.red,
                   thumbColor: context.appColors.scrollbarColor,
                   controller: _scrollController,
                   radius: const Radius.circular(8),
@@ -117,7 +116,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 20,
                           ),
-                      itemCount: data.products.length + (data.hasMore ? 1 : 0),
+                      itemCount:
+                          data.products.length + (data.isLoadingMore ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == data.products.length) {
                           return const Center(
