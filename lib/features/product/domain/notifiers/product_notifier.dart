@@ -13,7 +13,6 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
   static const int _limit = 10;
   int _currentOffset = 0;
   bool _hasMore = true;
-  bool _isLoadingMore = false;
   List<Product> _currentProducts = [];
 
   @override
@@ -24,7 +23,6 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
   Future<void> getProducts() async {
     _currentOffset = 0;
     _hasMore = true;
-    _isLoadingMore = false;
     _currentProducts = [];
     state = const BaseState.loading();
 
@@ -44,9 +42,9 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
   }
 
   Future<void> loadMore() async {
-    if (!_hasMore || _isLoadingMore) return;
+    if (!_hasMore || state is BaseLoading) return;
 
-    _isLoadingMore = true;
+    state = const BaseState.loading();
     _currentOffset += _limit;
 
     final eitherFailureOrProducts = await _productRepository.getProducts(
@@ -62,6 +60,7 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
       (products) {
         if (products.isEmpty) {
           _hasMore = false;
+          state = BaseState.data(_currentProducts);
         } else {
           _currentProducts = [..._currentProducts, ...products];
           _hasMore = products.length == _limit;
@@ -69,8 +68,5 @@ class ProductNotifier extends BaseNotifier<List<Product>> {
         }
       },
     );
-    _isLoadingMore = false;
   }
-
-  bool get isLoadingMore => _isLoadingMore;
 }

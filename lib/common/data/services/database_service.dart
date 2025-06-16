@@ -151,7 +151,7 @@ class DatabaseServiceImpl implements DatabaseService {
     // Get total count
     final countResponse =
         await _client.from(SupabaseConstants.productTable).count();
-    final totalCount = countResponse ?? 0;
+    final totalCount = countResponse;
 
     // Get items
     final to = offset + limit - 1;

@@ -11,6 +11,7 @@ class ShopzyButton extends StatelessWidget {
     this.disabledBackgroundColor,
     this.borderColor,
     this.textColor = Colors.white,
+    // ignore: unused_element_parameter
     this.height = 50,
   });
 

@@ -45,8 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final productsState = ref.watch(productNotifierProvider);
-    final isLoadingMore =
-        ref.watch(productNotifierProvider.notifier).isLoadingMore;
+    final isLoadingMore = productsState is BaseLoading;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

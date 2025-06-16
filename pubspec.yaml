@@ -37,7 +37,7 @@ dependencies:
   json_annotation: ^4.9.0
   loggy: ^2.0.3
   package_info_plus: ^8.3.0
-  q_architecture: ^1.0.4
+  q_architecture: ^1.0.5
   retrofit: ^4.4.2
   sentry_flutter: ^8.14.1
   sign_in_with_apple: ^6.1.4
