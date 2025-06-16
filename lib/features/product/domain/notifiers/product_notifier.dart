@@ -8,22 +8,23 @@ final productNotifierProvider =
       return ProductNotifier();
     }, name: 'Product Notifier Provider');
 
-class ProductNotifier extends Notifier<BaseState<List<Product>>> {
+class ProductNotifier extends BaseNotifier<List<Product>> {
   late final ProductRepository _productRepository;
   static const int _limit = 10;
   int _currentOffset = 0;
   bool _hasMore = true;
+  bool _isLoadingMore = false;
   List<Product> _currentProducts = [];
 
   @override
-  BaseState<List<Product>> build() {
+  void prepareForBuild() {
     _productRepository = ref.watch(productRepositoryProvider);
-    return const BaseState.initial();
   }
 
   Future<void> getProducts() async {
     _currentOffset = 0;
     _hasMore = true;
+    _isLoadingMore = false;
     _currentProducts = [];
     state = const BaseState.loading();
 
@@ -43,11 +44,11 @@ class ProductNotifier extends Notifier<BaseState<List<Product>>> {
   }
 
   Future<void> loadMore() async {
-    if (!_hasMore) return;
+    if (!_hasMore || _isLoadingMore) return;
 
-    await Future.delayed(const Duration(milliseconds: 300));
-
+    _isLoadingMore = true;
     _currentOffset += _limit;
+
     final eitherFailureOrProducts = await _productRepository.getProducts(
       offset: _currentOffset,
       limit: _limit,
@@ -68,8 +69,8 @@ class ProductNotifier extends Notifier<BaseState<List<Product>>> {
         }
       },
     );
+    _isLoadingMore = false;
   }
 
-  // ignore: avoid_public_notifier_properties
-  bool get hasMore => _hasMore;
+  bool get isLoadingMore => _isLoadingMore;
 }

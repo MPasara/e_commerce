@@ -18,17 +18,15 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  bool _hasMore = false;
-  bool _isLoadingMore = false;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    Future.microtask(() {
-      ref.read(productNotifierProvider.notifier).getProducts();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ref.read(productNotifierProvider.notifier).getProducts(),
+    );
   }
 
   @override
@@ -39,30 +37,16 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-            (_scrollController.position.maxScrollExtent * 0.7) &&
-        !_isLoadingMore &&
-        _hasMore) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async {
-    if (_isLoadingMore) return;
-
-    setState(() => _isLoadingMore = true);
-    try {
-      await ref.read(productNotifierProvider.notifier).loadMore();
-    } finally {
-      if (mounted) {
-        setState(() => _isLoadingMore = false);
-      }
+        (_scrollController.position.maxScrollExtent * 0.7)) {
+      ref.read(productNotifierProvider.notifier).loadMore();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final productsState = ref.watch(productNotifierProvider);
-    _hasMore = ref.read(productNotifierProvider.notifier).hasMore;
+    final isLoadingMore =
+        ref.watch(productNotifierProvider.notifier).isLoadingMore;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -135,7 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 20,
                           ),
-                      itemCount: data.length + (_hasMore ? 1 : 0),
+                      itemCount: data.length + (isLoadingMore ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == data.length) {
                           return const Center(
