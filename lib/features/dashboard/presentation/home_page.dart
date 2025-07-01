@@ -90,46 +90,52 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: ShopzyTextField.search(),
               ),
               Expanded(
-                child: RawScrollbar(
-                  padding: const EdgeInsets.only(right: 2),
-                  interactive: true,
-                  thumbColor: context.appColors.scrollbarColor,
-                  controller: _scrollController,
-                  radius: const Radius.circular(8),
-                  thickness: 4,
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      await ref
-                          .read(productNotifierProvider.notifier)
-                          .getProducts();
-                    },
-                    color: context.appColors.black,
-                    backgroundColor: context.appColors.gold,
-                    child: GridView.builder(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 20,
-                          ),
-                      itemCount:
-                          data.products.length + (data.isLoadingMore ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == data.products.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                        final product = data.products[index];
-                        return ProductCard(product: product, onTap: () {});
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    FocusScope.of(context).unfocus();
+                    return false;
+                  },
+                  child: RawScrollbar(
+                    padding: const EdgeInsets.only(right: 2),
+                    interactive: true,
+                    thumbColor: context.appColors.scrollbarColor,
+                    controller: _scrollController,
+                    radius: const Radius.circular(8),
+                    thickness: 4,
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await ref
+                            .read(productNotifierProvider.notifier)
+                            .getProducts();
                       },
+                      color: context.appColors.black,
+                      backgroundColor: context.appColors.gold,
+                      child: GridView.builder(
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 20,
+                            ),
+                        itemCount:
+                            data.products.length + (data.isLoadingMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == data.products.length) {
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 20),
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          final product = data.products[index];
+                          return ProductCard(product: product, onTap: () {});
+                        },
+                      ),
                     ),
                   ),
                 ),
