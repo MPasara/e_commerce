@@ -14,6 +14,8 @@ ProductResponse _$ProductResponseFromJson(Map<String, dynamic> json) =>
       price: (json['price'] as num).toDouble(),
       imageUrl: json['image'] as String?,
       description: json['description'] as String?,
+      categoryId: (json['category_id'] as num).toInt(),
+      productTypeId: (json['product_type_id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ProductResponseToJson(ProductResponse instance) =>
@@ -24,4 +26,6 @@ Map<String, dynamic> _$ProductResponseToJson(ProductResponse instance) =>
       'price': instance.price,
       'image': instance.imageUrl,
       'description': instance.description,
+      'category_id': instance.categoryId,
+      'product_type_id': instance.productTypeId,
     };

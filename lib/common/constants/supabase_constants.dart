@@ -1,5 +1,7 @@
 class SupabaseConstants {
   static const String productTable = 'Product';
+  static const String categoryTable = 'Category';
+  static const String productTypeTable = 'Product_type';
 
   // Google OAuth Client IDs
   static const String googleWebClientId =
