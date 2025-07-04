@@ -45,6 +45,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailHint": MessageLookupByLibrary.simpleMessage("example@email.com"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
+    "emptyProductsListMessage": MessageLookupByLibrary.simpleMessage(
+      "No items to show..",
+    ),
     "failedToLoadCategories": MessageLookupByLibrary.simpleMessage(
       "Failed to load categories",
     ),

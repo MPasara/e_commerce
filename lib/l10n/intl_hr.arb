@@ -39,5 +39,6 @@
     "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka",
     "clearFilter": "Očisti filter",
     "filterByCategory": "Filtriraj po kategoriji",
-    "failedToLoadCategories": "Neuspjelo učitavanje kategorija"
+    "failedToLoadCategories": "Neuspjelo učitavanje kategorija",
+    "emptyProductsListMessage": "Nema proizvoda za prikaz.."
 } 

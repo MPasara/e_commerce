@@ -41,5 +41,6 @@
     "productFetchError": "Error occurred while fetching products from database",
     "clearFilter": "Clear filter",
     "filterByCategory": "Filter by Category",
-    "failedToLoadCategories": "Failed to load categories"
+    "failedToLoadCategories": "Failed to load categories",
+    "emptyProductsListMessage": "No items to show.."
 }

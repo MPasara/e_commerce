@@ -418,6 +418,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No items to show..`
+  String get emptyProductsListMessage {
+    return Intl.message(
+      'No items to show..',
+      name: 'emptyProductsListMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

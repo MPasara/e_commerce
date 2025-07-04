@@ -45,6 +45,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailHint": MessageLookupByLibrary.simpleMessage("primjer@email.com"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("E-pošta"),
+    "emptyProductsListMessage": MessageLookupByLibrary.simpleMessage(
+      "Nema proizvoda za prikaz..",
+    ),
     "failedToLoadCategories": MessageLookupByLibrary.simpleMessage(
       "Neuspjelo učitavanje kategorija",
     ),
