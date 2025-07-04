@@ -7,6 +7,7 @@ part 'product_type_response.g.dart';
 class ProductTypeResponse {
   final int id;
   final String name;
+  @JsonKey(name: 'category_id')
   final int categoryId;
 
   @JsonKey(name: 'is_active')

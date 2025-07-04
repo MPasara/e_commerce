@@ -173,7 +173,8 @@ class DatabaseServiceImpl implements DatabaseService {
 
   @override
   Future<List<CategoryResponse>> fetchAllCategories() async {
-    final response = await _client.from(SupabaseConstants.categoryTable).select();
+    final response =
+        await _client.from(SupabaseConstants.categoryTable).select();
 
     final List<CategoryResponse> categories =
         response
@@ -185,10 +186,13 @@ class DatabaseServiceImpl implements DatabaseService {
 
   @override
   Future<List<ProductTypeResponse>> fetchAllProductTypes() async {
-    final response = await _client.from(SupabaseConstants.productTypeTable).select();
+    final response =
+        await _client.from(SupabaseConstants.productTypeTable).select();
 
     final List<ProductTypeResponse> productTypes =
-        response.map((productType) => ProductTypeResponse.fromJson(productType)).toList();
+        response
+            .map((productType) => ProductTypeResponse.fromJson(productType))
+            .toList();
 
     return productTypes;
   }

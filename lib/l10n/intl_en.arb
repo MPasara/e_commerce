@@ -38,5 +38,8 @@
     "bottomNavWishlist": "Wishlist",
     "bottomNavOrder": "Order",
     "bottomNavAccount": "Account",
-    "productFetchError": "Error occurred while fetching products from database"
+    "productFetchError": "Error occurred while fetching products from database",
+    "clearFilter": "Clear filter",
+    "filterByCategory": "Filter by Category",
+    "failedToLoadCategories": "Failed to load categories"
 }

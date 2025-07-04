@@ -20,7 +20,7 @@ class ProductNotifier extends BaseNotifier<ProductState> {
   Future<void> getProducts() async {
     state = const BaseState.loading();
 
-    final eitherFailureOrProducts = await _productRepository.getProducts(
+    final eitherFailureOrProducts = await _productRepository.getAllProducts(
       offset: 0,
       limit: _limit,
     );
@@ -47,7 +47,7 @@ class ProductNotifier extends BaseNotifier<ProductState> {
 
     state = BaseState.data(currentState.data.copyWith(isLoadingMore: true));
 
-    final eitherFailureOrProducts = await _productRepository.getProducts(
+    final eitherFailureOrProducts = await _productRepository.getAllProducts(
       offset: currentState.data.offset,
       limit: _limit,
     );

@@ -36,5 +36,8 @@
     "bottomNavWishlist": "Lista želja",
     "bottomNavOrder": "Narudžba",
     "bottomNavAccount": "Račun",
-    "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka"
+    "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka",
+    "clearFilter": "Očisti filter",
+    "filterByCategory": "Filtriraj po kategoriji",
+    "failedToLoadCategories": "Neuspjelo učitavanje kategorija"
 } 

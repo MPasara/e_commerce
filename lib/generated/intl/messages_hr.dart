@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bottomNavHome": MessageLookupByLibrary.simpleMessage("Početna"),
     "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Narudžba"),
     "bottomNavWishlist": MessageLookupByLibrary.simpleMessage("Lista želja"),
+    "clearFilter": MessageLookupByLibrary.simpleMessage("Očisti filter"),
     "confirmPasswordHint": MessageLookupByLibrary.simpleMessage(
       "Potvrdite lozinku",
     ),
@@ -44,6 +45,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailHint": MessageLookupByLibrary.simpleMessage("primjer@email.com"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("E-pošta"),
+    "failedToLoadCategories": MessageLookupByLibrary.simpleMessage(
+      "Neuspjelo učitavanje kategorija",
+    ),
+    "filterByCategory": MessageLookupByLibrary.simpleMessage(
+      "Filtriraj po kategoriji",
+    ),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "Zaboravljena lozinka",
     ),

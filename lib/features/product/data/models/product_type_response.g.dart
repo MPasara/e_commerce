@@ -15,7 +15,7 @@ ProductTypeResponse _$ProductTypeResponseFromJson(Map<String, dynamic> json) =>
           json['created_at'] == null
               ? null
               : DateTime.parse(json['created_at'] as String),
-      categoryId: (json['categoryId'] as num).toInt(),
+      categoryId: (json['category_id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ProductTypeResponseToJson(
@@ -23,7 +23,7 @@ Map<String, dynamic> _$ProductTypeResponseToJson(
 ) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,
-  'categoryId': instance.categoryId,
+  'category_id': instance.categoryId,
   'is_active': instance.isActive,
   'created_at': instance.createdAt?.toIso8601String(),
 };

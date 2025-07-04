@@ -388,6 +388,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Clear filter`
+  String get clearFilter {
+    return Intl.message(
+      'Clear filter',
+      name: 'clearFilter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter by Category`
+  String get filterByCategory {
+    return Intl.message(
+      'Filter by Category',
+      name: 'filterByCategory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load categories`
+  String get failedToLoadCategories {
+    return Intl.message(
+      'Failed to load categories',
+      name: 'failedToLoadCategories',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

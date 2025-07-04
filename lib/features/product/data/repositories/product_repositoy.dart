@@ -5,7 +5,6 @@ import 'package:shopzy/common/data/generic_error_resolver.dart';
 import 'package:shopzy/common/data/services/database_service.dart';
 import 'package:shopzy/features/product/data/mappers/product_entity_mapper.dart';
 import 'package:shopzy/features/product/data/models/category_response.dart';
-import 'package:shopzy/features/product/data/models/product_response.dart';
 import 'package:shopzy/features/product/data/models/product_type_response.dart';
 import 'package:shopzy/features/product/domain/entities/category.dart';
 import 'package:shopzy/features/product/domain/entities/product.dart';
@@ -15,17 +14,18 @@ import 'package:shopzy/generated/l10n.dart';
 final productRepositoryProvider = Provider<ProductRepository>(
   (ref) => ProductRepositoryImpl(
     ref.read(databaseServiceProvider),
-    ref.read(productEntityMapperProvider),
     ref.read(categoryEntityMapperProvider),
     ref.read(productTypeEntityMapperProvider),
+    ref,
   ),
   name: 'Product Repository Provider',
 );
 
 abstract interface class ProductRepository {
-  EitherFailureOr<List<Product>> getProducts({int offset = 0, int limit = 10});
-  EitherFailureOr<List<ProductCategory>> getAllCategories();
-  EitherFailureOr<List<ProductType>> getAllProductTypes();
+  EitherFailureOr<List<Product>> getAllProducts({
+    int offset = 0,
+    int limit = 10,
+  });
 }
 
 class ProductRepositoryImpl
@@ -33,18 +33,18 @@ class ProductRepositoryImpl
     implements ProductRepository {
   const ProductRepositoryImpl(
     this._databaseService,
-    this._productMapper,
     this._categoryMapper,
     this._productTypeMapper,
+    this._ref,
   );
 
   final DatabaseService _databaseService;
-  final EntityMapper<Product, ProductResponse> _productMapper;
   final EntityMapper<ProductCategory, CategoryResponse> _categoryMapper;
   final EntityMapper<ProductType, ProductTypeResponse> _productTypeMapper;
+  final Ref _ref;
 
   @override
-  EitherFailureOr<List<Product>> getProducts({
+  EitherFailureOr<List<Product>> getAllProducts({
     int offset = 0,
     int limit = 10,
   }) => execute(
@@ -53,44 +53,32 @@ class ProductRepositoryImpl
         offset: offset,
         limit: limit,
       );
+      final categoriesResponse = await _databaseService.fetchAllCategories();
+      final productTypesResponse =
+          await _databaseService.fetchAllProductTypes();
+
+      final categories = categoriesResponse.map(_categoryMapper).toList();
+      final productTypes =
+          productTypesResponse.map(_productTypeMapper).toList();
+
+      final categoryMap = {for (final c in categories) c.id: c};
+      final productTypeMap = {for (final pt in productTypes) pt.id: pt};
+
+      final productMapper = _ref.read(
+        productEntityMapperProvider(
+          ProductEntityMapperLookups(
+            categoryLookup: (id) => categoryMap[id],
+            productTypeLookup: (id) => productTypeMap[id],
+          ),
+        ),
+      );
+
       final products =
           result.items
-              .map((productResponse) => _productMapper(productResponse))
+              .map((productResponse) => productMapper(productResponse))
               .toList();
 
       return Right(products);
-    },
-    errorResolver: GenericErrorResolver(
-      failureTitle: S.current.productFetchError,
-    ),
-  );
-
-  @override
-  EitherFailureOr<List<ProductCategory>> getAllCategories() => execute(
-    () async {
-      final result = await _databaseService.fetchAllCategories();
-
-      final categories =
-          result
-              .map((categoryResponse) => _categoryMapper(categoryResponse))
-              .toList();
-
-      return Right(categories);
-    },
-    errorResolver: GenericErrorResolver(
-      failureTitle: S.current.productFetchError,
-    ),
-  );
-
-  @override
-  EitherFailureOr<List<ProductType>> getAllProductTypes() => execute(
-    () async {
-      final result = await _databaseService.fetchAllProductTypes();
-
-      final productTypes =
-          result.map((productTypeResponse) => _productTypeMapper(productTypeResponse)).toList();
-
-      return Right(productTypes);
     },
     errorResolver: GenericErrorResolver(
       failureTitle: S.current.productFetchError,
