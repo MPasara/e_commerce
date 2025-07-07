@@ -1,9 +1,11 @@
 {
     "@@locale": "en",
     "appName": "Shopzy",
+    "appName": "Shopzy",
     "emailHint": "example@email.com",
     "passwordHint": "Enter account password",
     "confirmPasswordHint": "Confirm password",
+    "searchHint": "Search for a product",
     "searchHint": "Search for a product",
     "passwordValidationError": "Password must be at least 6 characters",
     "loginWelcomeTitle": "Welcome back to Shopzy",
