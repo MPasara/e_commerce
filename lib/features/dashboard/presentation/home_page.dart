@@ -158,8 +158,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   ? data.products
                                   : data.products
                                       .where(
-                                        (p) =>
-                                            p.category.id ==
+                                        (product) =>
+                                            product.category.id ==
                                             selectedCategory.id,
                                       )
                                       .toList();

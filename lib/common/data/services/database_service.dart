@@ -4,7 +4,6 @@ import 'package:crypto/crypto.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shopzy/common/constants/supabase_constants.dart';
-import 'package:shopzy/common/constants/supabase_constants.dart';
 import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
 import 'package:shopzy/features/product/data/models/category_response.dart';
 import 'package:shopzy/features/product/data/models/product_response.dart';
@@ -110,8 +109,6 @@ class DatabaseServiceImpl implements DatabaseService {
   @override
   Future<void> signInWithGoogle() async {
     final googleSignIn = GoogleSignIn(
-      clientId: SupabaseConstants.googleIosClientId,
-      serverClientId: SupabaseConstants.googleWebClientId,
       clientId: SupabaseConstants.googleIosClientId,
       serverClientId: SupabaseConstants.googleWebClientId,
     );
