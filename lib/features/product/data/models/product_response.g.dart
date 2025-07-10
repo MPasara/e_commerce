@@ -16,6 +16,12 @@ ProductResponse _$ProductResponseFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       categoryId: (json['category_id'] as num).toInt(),
       productTypeId: (json['product_type_id'] as num).toInt(),
+      category: CategoryResponse.fromJson(
+        json['Category'] as Map<String, dynamic>,
+      ),
+      productType: ProductTypeResponse.fromJson(
+        json['Product_type'] as Map<String, dynamic>,
+      ),
     );
 
 Map<String, dynamic> _$ProductResponseToJson(ProductResponse instance) =>
@@ -28,4 +34,6 @@ Map<String, dynamic> _$ProductResponseToJson(ProductResponse instance) =>
       'description': instance.description,
       'category_id': instance.categoryId,
       'product_type_id': instance.productTypeId,
+      'Category': instance.category,
+      'Product_type': instance.productType,
     };

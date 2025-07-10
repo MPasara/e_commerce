@@ -8,59 +8,24 @@ import 'package:shopzy/features/product/domain/entities/category.dart';
 import 'package:shopzy/features/product/domain/entities/product.dart';
 import 'package:shopzy/features/product/domain/entities/product_type.dart';
 
-typedef CategoryLookup = ProductCategory? Function(int id);
-typedef ProductTypeLookup = ProductType? Function(int id);
+final productEntityMapperProvider =
+    Provider<EntityMapper<Product, ProductResponse>>((ref) {
+      return (response) {
+        final categoryMapper = ref.read(categoryEntityMapperProvider);
+        final productTypeMapper = ref.read(productTypeEntityMapperProvider);
 
-class ProductEntityMapperLookups {
-  final CategoryLookup categoryLookup;
-  final ProductTypeLookup productTypeLookup;
-
-  const ProductEntityMapperLookups({
-    required this.categoryLookup,
-    required this.productTypeLookup,
-  });
-
-  @override
-  bool operator ==(covariant ProductEntityMapperLookups other) {
-    if (identical(this, other)) return true;
-
-    return other.categoryLookup == categoryLookup &&
-        other.productTypeLookup == productTypeLookup;
-  }
-
-  @override
-  int get hashCode => categoryLookup.hashCode ^ productTypeLookup.hashCode;
-}
-
-final productEntityMapperProvider = Provider.family<
-  EntityMapper<Product, ProductResponse>,
-  ProductEntityMapperLookups
->(
-  (ref, lookups) => (response) {
-    final category = lookups.categoryLookup(response.categoryId);
-    final productType = lookups.productTypeLookup(response.productTypeId);
-
-    if (category == null) {
-      throw Exception('Category not found for id: ${response.categoryId}');
-    }
-    if (productType == null) {
-      throw Exception(
-        'ProductType not found for id: ${response.productTypeId}',
-      );
-    }
-
-    return Product(
-      id: response.id,
-      createdAt: response.createdAt,
-      name: response.name,
-      price: response.price,
-      description: response.description,
-      imageUrl: response.imageUrl,
-      category: category,
-      productType: productType,
-    );
-  },
-);
+        return Product(
+          id: response.id,
+          createdAt: response.createdAt,
+          name: response.name,
+          price: response.price,
+          imageUrl: response.imageUrl,
+          description: response.description,
+          category: categoryMapper(response.category),
+          productType: productTypeMapper(response.productType),
+        );
+      };
+    });
 
 final categoryEntityMapperProvider =
     Provider<EntityMapper<ProductCategory, CategoryResponse>>(

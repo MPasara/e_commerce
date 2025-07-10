@@ -6,6 +6,7 @@ import 'package:shopzy/common/presentation/spacing.dart';
 import 'package:shopzy/features/dashboard/presentation/widgets/category_filter_sheet.dart';
 import 'package:shopzy/features/dashboard/presentation/widgets/empty_products_list.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
+import 'package:shopzy/features/product/domain/entities/category.dart';
 import 'package:shopzy/features/product/domain/notifiers/product_notifier.dart';
 import 'package:shopzy/features/product/presentation/widgets/product_card.dart';
 import 'package:shopzy/generated/l10n.dart';
@@ -59,7 +60,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final productsState = ref.watch(productNotifierProvider);
-    final selectedCategory = ref.watch(selectedCategoryProvider);
+
+    ref.listen<ProductCategory?>(selectedCategoryProvider, (previous, next) {
+      if (previous != next) {
+        ref.read(productNotifierProvider.notifier).getProducts();
+      }
+    });
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -153,17 +159,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       backgroundColor: context.appColors.gold,
                       child: Builder(
                         builder: (context) {
-                          final filteredProducts =
-                              selectedCategory == null
-                                  ? data.products
-                                  : data.products
-                                      .where(
-                                        (product) =>
-                                            product.category.id ==
-                                            selectedCategory.id,
-                                      )
-                                      .toList();
-                          return filteredProducts.isEmpty
+                          final products = data.products;
+                          return products.isEmpty
                               ? EmptyProductsList()
                               : GridView.builder(
                                 controller: _scrollController,
@@ -177,10 +174,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       mainAxisSpacing: 20,
                                     ),
                                 itemCount:
-                                    filteredProducts.length +
+                                    products.length +
                                     (data.isLoadingMore ? 1 : 0),
                                 itemBuilder: (context, index) {
-                                  if (index == filteredProducts.length) {
+                                  if (index == products.length) {
                                     return const Center(
                                       child: Padding(
                                         padding: EdgeInsets.only(bottom: 20),
@@ -188,7 +185,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       ),
                                     );
                                   }
-                                  final product = filteredProducts[index];
+                                  final product = products[index];
                                   return ProductCard(
                                     product: product,
                                     onTap: () {},

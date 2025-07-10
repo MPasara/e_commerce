@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/base_notifier.dart';
+import 'package:shopzy/features/dashboard/presentation/widgets/category_filter_sheet.dart';
 import 'package:shopzy/features/product/data/repositories/product_repositoy.dart';
 import 'package:shopzy/features/product/domain/notifiers/product_state.dart';
 
@@ -19,12 +20,12 @@ class ProductNotifier extends BaseNotifier<ProductState> {
 
   Future<void> getProducts() async {
     state = const BaseState.loading();
-
+    final selectedCategory = ref.read(selectedCategoryProvider);
     final eitherFailureOrProducts = await _productRepository.getAllProducts(
       offset: 0,
       limit: _limit,
+      selectedCategory: selectedCategory,
     );
-
     state = eitherFailureOrProducts.fold(
       (failure) => BaseState.error(failure),
       (products) => BaseState.data(
@@ -44,14 +45,13 @@ class ProductNotifier extends BaseNotifier<ProductState> {
         currentState.data.isLoadingMore) {
       return;
     }
-
     state = BaseState.data(currentState.data.copyWith(isLoadingMore: true));
-
+    final selectedCategory = ref.read(selectedCategoryProvider);
     final eitherFailureOrProducts = await _productRepository.getAllProducts(
       offset: currentState.data.offset,
       limit: _limit,
+      selectedCategory: selectedCategory,
     );
-
     state = eitherFailureOrProducts.fold(
       (failure) {
         setGlobalFailure(failure);
