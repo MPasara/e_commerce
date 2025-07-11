@@ -14,7 +14,7 @@ abstract class RouteAction {
 }
 
 class PushNamedAction extends RouteAction {
-  PushNamedAction(super.routeName, super.data);
+  const PushNamedAction(super.routeName, super.data);
 
   @override
   void execute(BaseRouter baseRouter) =>
@@ -27,7 +27,7 @@ class PopAction extends RouteAction {
 }
 
 class PushReplacementNamedAction extends RouteAction {
-  PushReplacementNamedAction(super.routeName, super.data);
+  const PushReplacementNamedAction(super.routeName, super.data);
 
   @override
   void execute(BaseRouter baseRouter) =>
@@ -35,7 +35,7 @@ class PushReplacementNamedAction extends RouteAction {
 }
 
 class StackNamedAction extends RouteAction {
-  StackNamedAction(super.routeName, super.data);
+  const StackNamedAction(super.routeName, super.data);
 
   @override
   void execute(BaseRouter baseRouter) =>

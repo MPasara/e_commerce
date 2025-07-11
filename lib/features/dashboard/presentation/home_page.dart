@@ -22,7 +22,6 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
-  double _lastOffset = 0;
 
   @override
   void initState() {
@@ -41,8 +40,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void _onScroll() {
     final offset = _scrollController.position.pixels;
-
-    _lastOffset = offset;
 
     if (offset >= (_scrollController.position.maxScrollExtent * 0.7)) {
       ref.read(productNotifierProvider.notifier).loadMore();

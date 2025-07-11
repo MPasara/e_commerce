@@ -46,7 +46,7 @@ class CategoryFilterSheet extends ConsumerWidget {
                       height: 5,
                       decoration: BoxDecoration(
                         color: context.appColors.secondary?.withAlpha(90),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                     ),
                   ),
