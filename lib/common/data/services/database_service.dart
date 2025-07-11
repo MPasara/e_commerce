@@ -5,7 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shopzy/common/constants/supabase_constants.dart';
 import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
+import 'package:shopzy/features/product/data/models/category_response.dart';
 import 'package:shopzy/features/product/data/models/product_response.dart';
+import 'package:shopzy/features/product/data/models/product_type_response.dart';
+import 'package:shopzy/features/product/domain/entities/category.dart';
 import 'package:shopzy/generated/l10n.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,7 +36,11 @@ abstract interface class DatabaseService {
   Future<({List<ProductResponse> items, int totalCount})> fetchProducts({
     int offset = 0,
     int limit = 10,
+    ProductCategory? selectedCategory,
   });
+
+  Future<List<CategoryResponse>> fetchAllCategories();
+  Future<List<ProductTypeResponse>> fetchAllProductTypes();
 }
 
 class DatabaseServiceImpl implements DatabaseService {
@@ -147,23 +154,53 @@ class DatabaseServiceImpl implements DatabaseService {
   Future<({List<ProductResponse> items, int totalCount})> fetchProducts({
     int offset = 0,
     int limit = 10,
+    ProductCategory? selectedCategory,
   }) async {
-    // Get total count
-    final countResponse =
-        await _client.from(SupabaseConstants.productTable).count();
-    final totalCount = countResponse;
-
-    // Get items
     final to = offset + limit - 1;
-    final response = await _client
+    var query = _client
         .from(SupabaseConstants.productTable)
-        .select()
-        .range(offset, to);
+        .select(
+          '*, ${SupabaseConstants.categoryTable}(*), ${SupabaseConstants.productTypeTable}(*)',
+        );
+
+    if (selectedCategory != null) {
+      query = query.eq('category_id', selectedCategory.id);
+    }
+
+    final response = await query.range(offset, to).count();
 
     final List<ProductResponse> products =
-        response.map((product) => ProductResponse.fromJson(product)).toList();
+        response.data
+            .map((product) => ProductResponse.fromJson(product))
+            .toList();
 
-    return (items: products, totalCount: totalCount);
+    return (items: products, totalCount: response.count);
+  }
+
+  @override
+  Future<List<CategoryResponse>> fetchAllCategories() async {
+    final response =
+        await _client.from(SupabaseConstants.categoryTable).select();
+
+    final List<CategoryResponse> categories =
+        response
+            .map((category) => CategoryResponse.fromJson(category))
+            .toList();
+
+    return categories;
+  }
+
+  @override
+  Future<List<ProductTypeResponse>> fetchAllProductTypes() async {
+    final response =
+        await _client.from(SupabaseConstants.productTypeTable).select();
+
+    final List<ProductTypeResponse> productTypes =
+        response
+            .map((productType) => ProductTypeResponse.fromJson(productType))
+            .toList();
+
+    return productTypes;
   }
 }
 

@@ -22,12 +22,12 @@ class ShopzyTextField extends StatefulWidget {
 
   final String textFieldName;
   final String hintText;
-  final String? Function(String?)? fieldValidator;
+  final String? Function(String? value)? fieldValidator;
   final bool obscureText;
   final TextInputType? keyboardType;
   final bool showPasswordToggle;
   final FormBuilderState? formState;
-  final void Function(String?)? onChanged;
+  final void Function(String? value)? onChanged;
   final Widget? suffixIcon;
 
   factory ShopzyTextField.search() {
@@ -63,7 +63,7 @@ class ShopzyTextField extends StatefulWidget {
   }
 
   factory ShopzyTextField.confirmPassword([
-    String? Function(String?)? validator,
+    String? Function(String? value)? validator,
   ]) {
     return ShopzyTextField._(
       textFieldName: FormBuilderKeys.confirmPassword,

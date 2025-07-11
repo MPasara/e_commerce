@@ -3,7 +3,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/base_notifier.dart';
 import 'package:shopzy/common/presentation/build_context_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
+import 'package:shopzy/features/dashboard/presentation/widgets/category_filter_sheet.dart';
+import 'package:shopzy/features/dashboard/presentation/widgets/empty_products_list.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
+import 'package:shopzy/features/product/domain/entities/category.dart';
 import 'package:shopzy/features/product/domain/notifiers/product_notifier.dart';
 import 'package:shopzy/features/product/presentation/widgets/product_card.dart';
 import 'package:shopzy/generated/l10n.dart';
@@ -36,8 +39,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        (_scrollController.position.maxScrollExtent * 0.7)) {
+    final offset = _scrollController.position.pixels;
+
+    if (offset >= (_scrollController.position.maxScrollExtent * 0.7)) {
       ref.read(productNotifierProvider.notifier).loadMore();
     }
   }
@@ -46,10 +50,17 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final productsState = ref.watch(productNotifierProvider);
 
+    ref.listen<ProductCategory?>(selectedCategoryProvider, (previous, next) {
+      if (previous != next) {
+        ref.read(productNotifierProvider.notifier).getProducts();
+      }
+    });
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           centerTitle: true,
           title: Text(
             S.of(context).appName,
@@ -57,6 +68,18 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           backgroundColor: context.appColors.background,
           elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.tune, color: context.appColors.secondary),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (context) => CategoryFilterSheet(),
+              );
+            },
+          ),
           actions: [
             Icon(
               Icons.notifications_outlined,
@@ -90,46 +113,63 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: ShopzyTextField.search(),
               ),
               Expanded(
-                child: RawScrollbar(
-                  padding: const EdgeInsets.only(right: 2),
-                  interactive: true,
-                  thumbColor: context.appColors.scrollbarColor,
-                  controller: _scrollController,
-                  radius: const Radius.circular(8),
-                  thickness: 4,
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      await ref
-                          .read(productNotifierProvider.notifier)
-                          .getProducts();
-                    },
-                    color: context.appColors.black,
-                    backgroundColor: context.appColors.gold,
-                    child: GridView.builder(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 20,
-                          ),
-                      itemCount:
-                          data.products.length + (data.isLoadingMore ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == data.products.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                        final product = data.products[index];
-                        return ProductCard(product: product, onTap: () {});
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    FocusScope.of(context).unfocus();
+                    return false;
+                  },
+                  child: RawScrollbar(
+                    padding: const EdgeInsets.only(right: 2),
+                    interactive: true,
+                    thumbColor: context.appColors.scrollbarColor,
+                    controller: _scrollController,
+                    radius: const Radius.circular(8),
+                    thickness: 4,
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await ref
+                            .read(productNotifierProvider.notifier)
+                            .getProducts();
                       },
+                      color: context.appColors.black,
+                      backgroundColor: context.appColors.gold,
+                      child: Builder(
+                        builder: (context) {
+                          final products = data.products;
+                          return products.isEmpty
+                              ? EmptyProductsList()
+                              : GridView.builder(
+                                controller: _scrollController,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                padding: const EdgeInsets.all(16),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.75,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 20,
+                                    ),
+                                itemCount:
+                                    products.length +
+                                    (data.isLoadingMore ? 1 : 0),
+                                itemBuilder: (context, index) {
+                                  if (index == products.length) {
+                                    return const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: 20),
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                  final product = products[index];
+                                  return ProductCard(
+                                    product: product,
+                                    onTap: () {},
+                                  );
+                                },
+                              );
+                        },
+                      ),
                     ),
                   ),
                 ),

@@ -53,7 +53,6 @@ class MainPage extends ConsumerWidget {
           items: _buildNavigationItems(),
           currentIndex: _getCurrentIndex(ref),
           onTap: (selectedIndex) {
-            HapticFeedback.mediumImpact;
             _onItemTapped(ref: ref, index: selectedIndex);
           },
         ),
@@ -63,6 +62,7 @@ class MainPage extends ConsumerWidget {
   }
 
   void _onItemTapped({required WidgetRef ref, required int index}) {
+    HapticFeedback.mediumImpact;
     if (navigationShell != null) {
       navigationShell!.goBranch(
         index,

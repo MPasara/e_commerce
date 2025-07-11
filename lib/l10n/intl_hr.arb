@@ -1,9 +1,11 @@
 {
     "@@locale": "hr",
     "appName": "Shopzy",
+    "appName": "Shopzy",
     "emailHint": "primjer@email.com",
     "passwordHint": "Unesite lozinku računa",
     "confirmPasswordHint": "Potvrdite lozinku",
+    "searchHint": "Pretražite proizvod",
     "searchHint": "Pretražite proizvod",
     "passwordValidationError": "Lozinka mora imati najmanje 6 znakova",
     "loginWelcomeTitle": "Dobrodošli natrag u Shopzy",
@@ -36,5 +38,9 @@
     "bottomNavWishlist": "Lista želja",
     "bottomNavOrder": "Narudžba",
     "bottomNavAccount": "Račun",
-    "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka"
+    "productFetchError": "Došlo je do pogreške prilikom dohvaćanja proizvoda iz baze podataka",
+    "clearFilter": "Očisti filter",
+    "filterByCategory": "Filtriraj po kategoriji",
+    "failedToLoadCategories": "Neuspjelo učitavanje kategorija",
+    "emptyProductsListMessage": "Nema proizvoda za prikaz.."
 } 

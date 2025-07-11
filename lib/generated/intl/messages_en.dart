@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bottomNavHome": MessageLookupByLibrary.simpleMessage("Home"),
     "bottomNavOrder": MessageLookupByLibrary.simpleMessage("Order"),
     "bottomNavWishlist": MessageLookupByLibrary.simpleMessage("Wishlist"),
+    "clearFilter": MessageLookupByLibrary.simpleMessage("Clear filter"),
     "confirmPasswordHint": MessageLookupByLibrary.simpleMessage(
       "Confirm password",
     ),
@@ -44,6 +45,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailHint": MessageLookupByLibrary.simpleMessage("example@email.com"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
+    "emptyProductsListMessage": MessageLookupByLibrary.simpleMessage(
+      "No items to show..",
+    ),
+    "failedToLoadCategories": MessageLookupByLibrary.simpleMessage(
+      "Failed to load categories",
+    ),
+    "filterByCategory": MessageLookupByLibrary.simpleMessage(
+      "Filter by Category",
+    ),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot Password"),
     "googleAccessTokenNotFound": MessageLookupByLibrary.simpleMessage(
       "No Access Token found.",
