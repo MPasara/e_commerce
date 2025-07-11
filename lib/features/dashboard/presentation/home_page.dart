@@ -22,7 +22,6 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
-  bool _showSearchField = true;
   double _lastOffset = 0;
 
   @override
@@ -43,13 +42,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _onScroll() {
     final offset = _scrollController.position.pixels;
 
-    if (offset <= 0 && !_showSearchField) {
-      setState(() => _showSearchField = true);
-    } else if (offset > _lastOffset + 3 && _showSearchField) {
-      setState(() => _showSearchField = false);
-    } else if (offset < _lastOffset - 3 && !_showSearchField) {
-      setState(() => _showSearchField = true);
-    }
     _lastOffset = offset;
 
     if (offset >= (_scrollController.position.maxScrollExtent * 0.7)) {
@@ -119,21 +111,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           BaseData(:final data) => Column(
             children: [
-              AnimatedSize(
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOut,
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: _showSearchField ? 1.0 : 0.0,
-                  curve: Curves.linear,
-                  child:
-                      _showSearchField
-                          ? Padding(
-                            padding: const EdgeInsets.fromLTRB(25, 16, 25, 4),
-                            child: ShopzyTextField.search(),
-                          )
-                          : const SizedBox.shrink(),
-                ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 16, 25, 4),
+                child: ShopzyTextField.search(),
               ),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
@@ -150,7 +130,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     thickness: 4,
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        setState(() => _showSearchField = true);
                         await ref
                             .read(productNotifierProvider.notifier)
                             .getProducts();
