@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/base_notifier.dart';
 import 'package:shopzy/common/presentation/build_context_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
+import 'package:shopzy/features/dashboard/domain/notifiers/search_notifier.dart';
 import 'package:shopzy/features/dashboard/presentation/widgets/category_filter_sheet.dart';
 import 'package:shopzy/features/dashboard/presentation/widgets/empty_products_list.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
@@ -22,6 +25,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -35,6 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -106,75 +111,108 @@ class _HomePageState extends ConsumerState<HomePage> {
               style: TextStyle(color: context.appColors.errorRed),
             ),
           ),
-          BaseData(:final data) => Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 16, 25, 4),
-                child: ShopzyTextField.search(),
-              ),
-              Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    FocusScope.of(context).unfocus();
-                    return false;
-                  },
-                  child: RawScrollbar(
-                    padding: const EdgeInsets.only(right: 2),
-                    interactive: true,
-                    thumbColor: context.appColors.scrollbarColor,
-                    controller: _scrollController,
-                    radius: const Radius.circular(8),
-                    thickness: 4,
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        await ref
-                            .read(productNotifierProvider.notifier)
-                            .getProducts();
-                      },
-                      color: context.appColors.black,
-                      backgroundColor: context.appColors.gold,
-                      child: Builder(
-                        builder: (context) {
-                          final products = data.products;
-                          return products.isEmpty
-                              ? EmptyProductsList()
-                              : GridView.builder(
-                                controller: _scrollController,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(16),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 0.75,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 20,
-                                    ),
-                                itemCount:
-                                    products.length +
-                                    (data.isLoadingMore ? 1 : 0),
-                                itemBuilder: (context, index) {
-                                  if (index == products.length) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  }
-                                  final product = products[index];
-                                  return ProductCard(
-                                    product: product,
-                                    onTap: () {},
-                                  );
+          BaseData(:final data) => NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              FocusScope.of(context).unfocus();
+              return false;
+            },
+            child: RawScrollbar(
+              padding: const EdgeInsets.only(right: 2),
+              interactive: true,
+              thumbColor: context.appColors.scrollbarColor,
+              controller: _scrollController,
+              radius: const Radius.circular(8),
+              thickness: 4,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await ref
+                      .read(productNotifierProvider.notifier)
+                      .getProducts();
+                },
+                color: context.appColors.black,
+                backgroundColor: context.appColors.gold,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverAppBar(
+                      scrolledUnderElevation: 0,
+                      backgroundColor: context.appColors.background,
+                      elevation: 0,
+                      floating: true,
+                      snap: true,
+                      automaticallyImplyLeading: false,
+                      toolbarHeight: 88,
+                      flexibleSpace: Container(
+                        padding: const EdgeInsets.fromLTRB(25, 16, 25, 0),
+                        child: SafeArea(
+                          child: ShopzyTextField.search(
+                            onChanged: (value) {
+                              if (_debounce?.isActive ?? false) {
+                                _debounce?.cancel();
+                              }
+                              _debounce = Timer(
+                                const Duration(milliseconds: 500),
+                                () {
+                                  ref
+                                      .read(searchNotifierProvider.notifier)
+                                      .searchProducts(value ?? '');
                                 },
                               );
-                        },
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+
+                    Builder(
+                      builder: (context) {
+                        final products = data.products;
+
+                        if (products.isEmpty) {
+                          return SliverFillRemaining(
+                            child: EmptyProductsList(),
+                          );
+                        }
+
+                        return SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                if (index == products.length) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                                final product = products[index];
+                                return ProductCard(
+                                  product: product,
+                                  onTap: () {},
+                                );
+                              },
+                              childCount:
+                                  products.length +
+                                  (data.isLoadingMore ? 1 : 0),
+                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.75,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 20,
+                                ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         },
       ),
