@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/base_notifier.dart';
 import 'package:shopzy/common/presentation/build_context_extensions.dart';
 import 'package:shopzy/common/presentation/spacing.dart';
-import 'package:shopzy/features/dashboard/domain/notifiers/search_notifier.dart';
 import 'package:shopzy/features/dashboard/presentation/widgets/category_filter_sheet.dart';
 import 'package:shopzy/features/dashboard/presentation/widgets/empty_products_list.dart';
 import 'package:shopzy/features/login/presentation/widgets/shopzy_text_field.dart';
@@ -25,6 +24,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
 
   @override
@@ -39,6 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     _debounce?.cancel();
     super.dispose();
   }
@@ -147,6 +148,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         padding: const EdgeInsets.fromLTRB(25, 16, 25, 0),
                         child: SafeArea(
                           child: ShopzyTextField.search(
+                            controller: _searchController,
                             onChanged: (value) {
                               if (_debounce?.isActive ?? false) {
                                 _debounce?.cancel();
@@ -154,9 +156,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                               _debounce = Timer(
                                 const Duration(milliseconds: 500),
                                 () {
-                                  ref
-                                      .read(searchNotifierProvider.notifier)
-                                      .searchProducts(value ?? '');
+                                  if (value!.isEmpty) {
+                                    ref
+                                        .read(productNotifierProvider.notifier)
+                                        .getProducts();
+                                  } else {
+                                    ref
+                                        .read(productNotifierProvider.notifier)
+                                        .searchProducts(value);
+                                  }
                                 },
                               );
                             },

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loggy/loggy.dart';
 import 'package:shopzy/common/constants/supabase_constants.dart';
 import 'package:shopzy/features/auth/domain/enums/auth_state_change.dart';
 import 'package:shopzy/features/product/data/models/category_response.dart';
@@ -41,6 +42,10 @@ abstract interface class DatabaseService {
 
   Future<List<CategoryResponse>> fetchAllCategories();
   Future<List<ProductTypeResponse>> fetchAllProductTypes();
+
+  Future<({List<ProductResponse> items})> searchProducts({
+    required String searchQuery,
+  });
 }
 
 class DatabaseServiceImpl implements DatabaseService {
@@ -201,6 +206,24 @@ class DatabaseServiceImpl implements DatabaseService {
             .toList();
 
     return productTypes;
+  }
+
+  @override
+  Future<({List<ProductResponse> items})> searchProducts({
+    required String searchQuery,
+  }) async {
+    final response = await _client
+        .from(SupabaseConstants.productTable)
+        .select(
+          '*, ${SupabaseConstants.categoryTable}(*), ${SupabaseConstants.productTypeTable}(*)',
+        )
+        .ilike('name', '%$searchQuery%');
+
+    final List<ProductResponse> items =
+        response.map((product) => ProductResponse.fromJson(product)).toList();
+
+    logDebug('Product search triggered: $searchQuery, found: ${items.length}');
+    return (items: items);
   }
 }
 

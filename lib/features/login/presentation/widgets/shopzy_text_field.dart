@@ -18,6 +18,7 @@ class ShopzyTextField extends StatefulWidget {
     this.formState,
     this.onChanged,
     this.suffixIcon,
+    this.controller,
   });
 
   final String textFieldName;
@@ -29,13 +30,18 @@ class ShopzyTextField extends StatefulWidget {
   final FormBuilderState? formState;
   final void Function(String? value)? onChanged;
   final Widget? suffixIcon;
+  final TextEditingController? controller;
 
-  factory ShopzyTextField.search() {
+  factory ShopzyTextField.search({
+    void Function(String? value)? onChanged,
+    TextEditingController? controller,
+  }) {
     return ShopzyTextField._(
       textFieldName: FormBuilderKeys.search,
       hintText: S.current.searchHint,
       keyboardType: TextInputType.text,
-      onChanged: (value) {},
+      onChanged: onChanged,
+      controller: controller,
     );
   }
 
@@ -82,26 +88,30 @@ class ShopzyTextField extends StatefulWidget {
 }
 
 class _ShopzyTextFieldState extends State<ShopzyTextField> {
+  // ignore: dispose_controllers
+  late final TextEditingController _effectiveController;
   late bool _obscureText;
-  final TextEditingController _controller = TextEditingController();
   bool _showClearButton = false;
 
   @override
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
-    _controller.addListener(_onTextChanged);
+    _effectiveController = widget.controller ?? TextEditingController();
+    _effectiveController.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_onTextChanged);
-    _controller.dispose();
+    _effectiveController.removeListener(_onTextChanged);
+    if (widget.controller == null) {
+      _effectiveController.dispose();
+    }
     super.dispose();
   }
 
   void _onTextChanged() {
-    final showClearButton = _controller.text.isNotEmpty;
+    final showClearButton = _effectiveController.text.isNotEmpty;
     if (showClearButton != _showClearButton) {
       setState(() {
         _showClearButton = showClearButton;
@@ -110,7 +120,7 @@ class _ShopzyTextFieldState extends State<ShopzyTextField> {
   }
 
   void _clearText() {
-    _controller.clear();
+    _effectiveController.clear();
     if (widget.formState != null) {
       widget.formState!.fields[widget.textFieldName]?.didChange(null);
     }
@@ -120,7 +130,7 @@ class _ShopzyTextFieldState extends State<ShopzyTextField> {
   Widget build(BuildContext context) {
     return FormBuilderTextField(
       name: widget.textFieldName,
-      controller: _controller,
+      controller: _effectiveController,
       obscureText: _obscureText,
       keyboardType: widget.keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
