@@ -106,10 +106,28 @@ class _HomePageState extends ConsumerState<HomePage> {
               color: context.appColors.secondary,
             ),
           ),
-          BaseError(:final failure) => Center(
-            child: Text(
-              'Error: ${failure.error}',
-              style: TextStyle(color: context.appColors.errorRed),
+          BaseError() => RefreshIndicator(
+            onRefresh: () async {
+              await ref.read(productNotifierProvider.notifier).getProducts();
+            },
+            color: context.appColors.black,
+            backgroundColor: context.appColors.gold,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.7,
+                  child: Center(
+                    child: Text(
+                      S.of(context).productFetchError,
+                      textAlign: TextAlign.center,
+                      style: context.appTextStyles.bold!.copyWith(
+                        color: context.appColors.errorRed,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           BaseData(:final data) => NotificationListener<ScrollNotification>(
@@ -172,18 +190,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                     ),
-
-                    Builder(
-                      builder: (context) {
-                        final products = data.products;
-
-                        if (products.isEmpty) {
-                          return SliverFillRemaining(
-                            child: EmptyProductsList(),
-                          );
-                        }
-
-                        return SliverPadding(
+                    ...(() {
+                      final products = data.products;
+                      if (products.isEmpty) {
+                        return [
+                          SliverFillRemaining(child: EmptyProductsList()),
+                        ];
+                      }
+                      return [
+                        SliverPadding(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                           sliver: SliverGrid(
                             delegate: SliverChildBuilderDelegate(
@@ -214,9 +229,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   mainAxisSpacing: 20,
                                 ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ];
+                    })(),
                   ],
                 ),
               ),
