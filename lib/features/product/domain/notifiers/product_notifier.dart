@@ -76,4 +76,17 @@ class ProductNotifier extends BaseNotifier<ProductState> {
       },
     );
   }
+
+  Future<void> searchProducts(String searchQuery) async {
+    state = BaseLoading();
+    final eitherFailureOrProducts = await _productRepository.searchProducts(
+      searchQuery: searchQuery,
+    );
+    state = eitherFailureOrProducts.fold(
+      (failure) => BaseState.error(failure),
+      (success) => BaseState.data(
+        ProductState(products: success.products, offset: 0, hasMore: false),
+      ),
+    );
+  }
 }

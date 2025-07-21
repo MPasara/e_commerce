@@ -19,6 +19,10 @@ abstract interface class ProductRepository {
     int limit = 10,
     ProductCategory? selectedCategory,
   });
+
+  EitherFailureOr<({List<Product> products})> searchProducts({
+    required String searchQuery,
+  });
 }
 
 class ProductRepositoryImpl
@@ -55,4 +59,22 @@ class ProductRepositoryImpl
       failureTitle: S.current.productFetchError,
     ),
   );
+
+  @override
+  EitherFailureOr<({List<Product> products})> searchProducts({
+    required String searchQuery,
+  }) => execute(() async {
+    final result = await _databaseService.searchProducts(
+      searchQuery: searchQuery,
+    );
+
+    final productMapper = _ref.read(productEntityMapperProvider);
+
+    final products =
+        result.items
+            .map((productResponse) => productMapper(productResponse))
+            .toList();
+
+    return Right((products: products));
+  }, errorResolver: GenericErrorResolver());
 }

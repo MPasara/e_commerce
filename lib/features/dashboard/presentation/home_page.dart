@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:q_architecture/base_notifier.dart';
@@ -22,6 +24,8 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -35,6 +39,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -100,81 +106,136 @@ class _HomePageState extends ConsumerState<HomePage> {
               color: context.appColors.secondary,
             ),
           ),
-          BaseError(:final failure) => Center(
-            child: Text(
-              'Error: ${failure.error}',
-              style: TextStyle(color: context.appColors.errorRed),
-            ),
-          ),
-          BaseData(:final data) => Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 16, 25, 4),
-                child: ShopzyTextField.search(),
-              ),
-              Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    FocusScope.of(context).unfocus();
-                    return false;
-                  },
-                  child: RawScrollbar(
-                    padding: const EdgeInsets.only(right: 2),
-                    interactive: true,
-                    thumbColor: context.appColors.scrollbarColor,
-                    controller: _scrollController,
-                    radius: const Radius.circular(8),
-                    thickness: 4,
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        await ref
-                            .read(productNotifierProvider.notifier)
-                            .getProducts();
-                      },
-                      color: context.appColors.black,
-                      backgroundColor: context.appColors.gold,
-                      child: Builder(
-                        builder: (context) {
-                          final products = data.products;
-                          return products.isEmpty
-                              ? EmptyProductsList()
-                              : GridView.builder(
-                                controller: _scrollController,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(16),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 0.75,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 20,
-                                    ),
-                                itemCount:
-                                    products.length +
-                                    (data.isLoadingMore ? 1 : 0),
-                                itemBuilder: (context, index) {
-                                  if (index == products.length) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  }
-                                  final product = products[index];
-                                  return ProductCard(
-                                    product: product,
-                                    onTap: () {},
-                                  );
-                                },
-                              );
-                        },
+          BaseError() => RefreshIndicator(
+            onRefresh: () async {
+              await ref.read(productNotifierProvider.notifier).getProducts();
+            },
+            color: context.appColors.black,
+            backgroundColor: context.appColors.gold,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.7,
+                  child: Center(
+                    child: Text(
+                      S.of(context).productFetchError,
+                      textAlign: TextAlign.center,
+                      style: context.appTextStyles.bold!.copyWith(
+                        color: context.appColors.errorRed,
                       ),
                     ),
                   ),
                 ),
+              ],
+            ),
+          ),
+          BaseData(:final data) => NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              FocusScope.of(context).unfocus();
+              return false;
+            },
+            child: RawScrollbar(
+              padding: const EdgeInsets.only(right: 2),
+              interactive: true,
+              thumbColor: context.appColors.scrollbarColor,
+              controller: _scrollController,
+              radius: const Radius.circular(8),
+              thickness: 4,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await ref
+                      .read(productNotifierProvider.notifier)
+                      .getProducts();
+                },
+                color: context.appColors.black,
+                backgroundColor: context.appColors.gold,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverAppBar(
+                      scrolledUnderElevation: 0,
+                      backgroundColor: context.appColors.background,
+                      elevation: 0,
+                      floating: true,
+                      snap: true,
+                      automaticallyImplyLeading: false,
+                      toolbarHeight: 88,
+                      flexibleSpace: Container(
+                        padding: const EdgeInsets.fromLTRB(25, 16, 25, 0),
+                        child: SafeArea(
+                          child: ShopzyTextField.search(
+                            controller: _searchController,
+                            onChanged: (value) {
+                              if (_debounce?.isActive ?? false) {
+                                _debounce?.cancel();
+                              }
+                              _debounce = Timer(
+                                const Duration(milliseconds: 500),
+                                () {
+                                  if (value!.isEmpty) {
+                                    ref
+                                        .read(productNotifierProvider.notifier)
+                                        .getProducts();
+                                  } else {
+                                    ref
+                                        .read(productNotifierProvider.notifier)
+                                        .searchProducts(value);
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    ...(() {
+                      final products = data.products;
+                      if (products.isEmpty) {
+                        return [
+                          SliverFillRemaining(child: EmptyProductsList()),
+                        ];
+                      }
+                      return [
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                if (index == products.length) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                                final product = products[index];
+                                return ProductCard(
+                                  product: product,
+                                  onTap: () {},
+                                );
+                              },
+                              childCount:
+                                  products.length +
+                                  (data.isLoadingMore ? 1 : 0),
+                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.75,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 20,
+                                ),
+                          ),
+                        ),
+                      ];
+                    })(),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         },
       ),
